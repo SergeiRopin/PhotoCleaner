@@ -6,7 +6,7 @@ using PhotoCleaner.ViewModels;
 using System.Windows;
 using System.Windows.Input;
 
-namespace PhotoCleaner
+namespace PhotoCleaner.Views
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml

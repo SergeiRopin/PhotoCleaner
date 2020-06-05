@@ -1,9 +1,8 @@
-﻿<Window x:Class="PhotoCleaner.MainWindow"
+﻿<Window x:Class="PhotoCleaner.Views.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:PhotoCleaner"
         xmlns:domain="clr-namespace:PhotoCleaner.Domain"
         xmlns:i="clr-namespace:Microsoft.Xaml.Behaviors;assembly=Microsoft.Xaml.Behaviors"
         xmlns:localization="clr-namespace:PhotoCleaner.Localization"
@@ -59,10 +58,15 @@
                 </ComboBox>
             </Grid>
             <DockPanel LastChildFill="True" Grid.Row="3" Grid.Column="0">
+                <!--This element is used to stretch ListBox in height-->
                 <TextBlock DockPanel.Dock="Top" Height="0"/>
-                <TextBox DockPanel.Dock="Bottom" Text="{Binding SourceFilesInfo}" IsReadOnly="True" Style="{DynamicResource SourceFilesInfoVisibility}" Height="20" Margin="5,0,5,0"/>
+                <Border DockPanel.Dock="Bottom" Style="{StaticResource SourceFilesInfoBlock}">
+                    <TextBlock x:Name="sourceFilesInfoBlock" Style="{DynamicResource SourceFilesInfoText}">
+                        <Run Text="{Binding SourceFilesInfo}" Style="{StaticResource FilesInfoMessage}"/>
+                    </TextBlock>
+                </Border>
                 <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="5,0,5,0">
-                    <ListBox x:Name="sourceFiles" ItemsSource="{Binding SourceFiles}" Background="White" BorderBrush="Gray" BorderThickness="0.5" >
+                    <ListBox x:Name="sourceFiles" ItemsSource="{Binding SourceFiles}" ItemContainerStyle="{DynamicResource FilesComparisonStyle}" Background="White" BorderBrush="Gray" BorderThickness="0.5" >
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding Name}" />
@@ -96,18 +100,17 @@
                     </i:Interaction.Triggers>
                 </ComboBox>
             </Grid>
-            <DockPanel LastChildFill="True" Grid.Row="3" Grid.Column="2" >
+            <DockPanel LastChildFill="True" Grid.Row="3" Grid.Column="2" > 
+                <!--This element is used to stretch ListBox in height-->
                 <TextBlock DockPanel.Dock="Top" Height="0"/>
-                <TextBox DockPanel.Dock="Bottom" IsReadOnly="True" Style="{DynamicResource TargetFilesInfoVisibility}" Height="20" Margin="5,0,5,0">
-                    <TextBox.Text>
-                        <MultiBinding StringFormat="{}{0} {1}">
-                            <Binding Path="TargetFilesInfo" />
-                            <Binding Path="RemovableFilesInfo" />
-                        </MultiBinding>
-                    </TextBox.Text>
-                </TextBox>
+                <Border DockPanel.Dock="Bottom" Style="{StaticResource TargetFilesInfoBlock}">
+                    <TextBlock x:Name="targetFilesInfoBlock" Style="{DynamicResource TargetFilesInfoText}">
+                        <Run Text="{Binding TargetFilesInfo}" Style="{StaticResource FilesInfoMessage}"/>
+                        <Run Text="{Binding RemovableFilesInfo}" Style="{StaticResource FilesInfoWarning}"/>
+                    </TextBlock>
+                </Border>
                 <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="5,0,5,0">
-                    <ListBox x:Name="targetFiles" ItemsSource="{Binding TargetFiles}" BorderBrush="Gray" BorderThickness="0.5">
+                    <ListBox x:Name="targetFiles" ItemsSource="{Binding TargetFiles}" ItemContainerStyle="{DynamicResource FilesComparisonStyle}" BorderBrush="Gray" BorderThickness="0.5">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel>

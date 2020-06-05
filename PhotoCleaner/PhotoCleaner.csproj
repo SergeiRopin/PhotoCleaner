@@ -140,7 +140,11 @@
     <Compile Include="Services\FilesInfoProvider\FilesInfoTextProvider.cs" />
     <Compile Include="Services\FilesInfoProvider\IFilesInfoProvider.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
-    <Page Include="MainWindow.xaml">
+    <Page Include="Resources\Styles\FilesInfoBlockStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -151,7 +155,7 @@
     <Compile Include="Services\DialogService\DefaultDialogService.cs" />
     <Compile Include="Services\DialogService\IDialogService.cs" />
     <Compile Include="GlobalSuppressions.cs" />
-    <Compile Include="MainWindow.xaml.cs">
+    <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
