@@ -61,6 +61,15 @@ namespace PhotoCleaner.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Расширение.
+        /// </summary>
+        public static string Extension {
+            get {
+                return ResourceManager.GetString("Extension", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Здесь выберите все очищенные и отредактированные фото, которые вы не хотите утратить после очистки.
         /// </summary>
         public static string Header {
@@ -70,7 +79,25 @@ namespace PhotoCleaner.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Выберите фото в формате {0} здесь.
+        ///   Looks up a localized string similar to Выберите путь к файлам.
+        /// </summary>
+        public static string SelectDirectory {
+            get {
+                return ResourceManager.GetString("SelectDirectory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Выберите расширение.
+        /// </summary>
+        public static string SelectExtension {
+            get {
+                return ResourceManager.GetString("SelectExtension", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Выберите фото в формате {0}.
         /// </summary>
         public static string SelectFilesMessage {
             get {

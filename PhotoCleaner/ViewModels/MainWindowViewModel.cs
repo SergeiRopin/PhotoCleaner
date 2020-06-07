@@ -118,11 +118,13 @@ namespace PhotoCleaner.ViewModels
             set
             {
                 _removableFilesInfo = value;
+                OnPropertyChanged("IsActionButtonEnabled");
                 OnPropertyChanged("RemovableFilesInfo");
             }
         }
         public bool TargetFilesInfoIsVisible => TargetFilesInfo != null;
         public bool SourceFilesInfoIsVisible => SourceFilesInfo != null;
+        public bool IsActionButtonEnabled => RemovableFilesInfo != FilesInfoStrings.NoFilesToRemove;
 
         public Command OpenFilesCommand
         {

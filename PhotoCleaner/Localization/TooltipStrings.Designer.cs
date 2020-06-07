@@ -22,14 +22,14 @@ namespace PhotoCleaner.Localization {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class TargetFileStrings {
+    public class TooltipStrings {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal TargetFileStrings() {
+        internal TooltipStrings() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace PhotoCleaner.Localization {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("PhotoCleaner.Localization.TargetFileStrings", typeof(TargetFileStrings).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("PhotoCleaner.Localization.TooltipStrings", typeof(TooltipStrings).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,38 +61,22 @@ namespace PhotoCleaner.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Расширение.
+        ///   Looks up a localized string similar to Файлы, подсвеченные красным,
+        ///будут удалены безвозвратно.
         /// </summary>
-        public static string Extension {
+        public static string ActionPanelDelete {
             get {
-                return ResourceManager.GetString("Extension", resourceCulture);
+                return ResourceManager.GetString("ActionPanelDelete", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Здесь выберите все НЕочищенные фото, которые содержат дубликаты, подлежащие удалению.
+        ///   Looks up a localized string similar to Файлы, подсвеченные красным,
+        ///будут перемещены в новую папку.
         /// </summary>
-        public static string Header {
+        public static string ActionPanelMove {
             get {
-                return ResourceManager.GetString("Header", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Выберите расширение.
-        /// </summary>
-        public static string SelectExtension {
-            get {
-                return ResourceManager.GetString("SelectExtension", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Выберите фото в формате {0}.
-        /// </summary>
-        public static string SelectFilesMessage {
-            get {
-                return ResourceManager.GetString("SelectFilesMessage", resourceCulture);
+                return ResourceManager.GetString("ActionPanelMove", resourceCulture);
             }
         }
     }

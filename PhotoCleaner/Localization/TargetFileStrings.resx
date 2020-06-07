@@ -117,10 +117,16 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Extension" xml:space="preserve">
+    <value>Расширение</value>
+  </data>
   <data name="Header" xml:space="preserve">
     <value>Здесь выберите все НЕочищенные фото, которые содержат дубликаты, подлежащие удалению</value>
   </data>
+  <data name="SelectExtension" xml:space="preserve">
+    <value>Выберите расширение</value>
+  </data>
   <data name="SelectFilesMessage" xml:space="preserve">
-    <value>Выберите фото в формате {0} здесь</value>
+    <value>Выберите фото в формате {0}</value>
   </data>
 </root>

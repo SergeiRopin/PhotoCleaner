@@ -61,7 +61,7 @@ namespace PhotoCleaner.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Кажется нам нечего удалять :-).
+        ///   Looks up a localized string similar to Кажется, нам нечего удалять :-).
         /// </summary>
         public static string NoFilesToRemove {
             get {

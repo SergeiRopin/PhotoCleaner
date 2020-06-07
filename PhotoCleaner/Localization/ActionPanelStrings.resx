@@ -117,19 +117,16 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Extension" xml:space="preserve">
-    <value>Расширение</value>
+  <data name="Clear" xml:space="preserve">
+    <value>Начать очистку</value>
   </data>
-  <data name="Header" xml:space="preserve">
-    <value>Здесь выберите все очищенные и отредактированные фото, которые вы не хотите утратить после очистки</value>
+  <data name="Delete" xml:space="preserve">
+    <value>Удалить</value>
   </data>
-  <data name="SelectDirectory" xml:space="preserve">
-    <value>Выберите путь к файлам</value>
+  <data name="Move" xml:space="preserve">
+    <value>Переместить</value>
   </data>
-  <data name="SelectExtension" xml:space="preserve">
-    <value>Выберите расширение</value>
-  </data>
-  <data name="SelectFilesMessage" xml:space="preserve">
-    <value>Выберите фото в формате {0}</value>
+  <data name="SelectAction" xml:space="preserve">
+    <value>Что сделать с файлами?</value>
   </data>
 </root>
