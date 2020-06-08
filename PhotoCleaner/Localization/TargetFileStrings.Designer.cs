@@ -70,11 +70,20 @@ namespace PhotoCleaner.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Здесь выберите все НЕочищенные фото, которые содержат дубликаты, подлежащие удалению.
+        ///   Looks up a localized string similar to Выберите все НЕочищенные фото, которые содержат дубликаты, подлежащие удалению.
         /// </summary>
         public static string Header {
             get {
                 return ResourceManager.GetString("Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Путь к файлам.
+        /// </summary>
+        public static string SelectDirectory {
+            get {
+                return ResourceManager.GetString("SelectDirectory", resourceCulture);
             }
         }
         

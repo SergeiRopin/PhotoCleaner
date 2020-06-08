@@ -29,6 +29,7 @@ namespace PhotoCleaner.ViewModels
         private string _sourceFilesInfo;
         private string _targetFilesInfo;
         private string _removableFilesInfo;
+        private FilesClearType _filesClearAction;
 
         public MainWindowViewModel(
             IDialogService dialogService, 
@@ -44,6 +45,7 @@ namespace PhotoCleaner.ViewModels
                 SelectedSourceExtension = FileExtensions.First();
                 SelectedTargetExtension = FileExtensions.First();
             }
+            _filesClearAction = FilesClearType.Move;
         }
 
         public ObservableCollection<@File> SourceFiles { get; private set; } = new ObservableCollection<@File>();
@@ -124,7 +126,18 @@ namespace PhotoCleaner.ViewModels
         }
         public bool TargetFilesInfoIsVisible => TargetFilesInfo != null;
         public bool SourceFilesInfoIsVisible => SourceFilesInfo != null;
-        public bool IsActionButtonEnabled => RemovableFilesInfo != FilesInfoStrings.NoFilesToRemove;
+        public bool IsActionButtonEnabled => RemovableFilesInfo != null && RemovableFilesInfo != FilesInfoStrings.NoFilesToRemove;
+        public FilesClearType FilesClearAction
+        {
+            get => _filesClearAction;
+            set 
+            {
+                _filesClearAction = value;
+                OnPropertyChanged("ActionButtonTooltip");
+                OnPropertyChanged("FilesClearAction");
+            }
+        }
+        public string ActionButtonTooltip => FilesClearAction == FilesClearType.Move ? TooltipStrings.ActionButtonMove : TooltipStrings.ActionButtonDelete;
 
         public Command OpenFilesCommand
         {
@@ -157,6 +170,17 @@ namespace PhotoCleaner.ViewModels
                         _filesComparer.Compare(SourceFiles, TargetFiles);
                         RemovableFilesInfo = _filesInfoProvider.GetComparisonInfo(SourceFiles, TargetFiles);
                     }
+                });
+            }
+        }
+
+        public Command UpdateFilesClearAction
+        {
+            get
+            {
+                return new Command(obj =>
+                { 
+                    FilesClearAction = (FilesClearType)Enum.Parse(typeof(FilesClearType), obj.ToString());
                 });
             }
         }

@@ -116,6 +116,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Commands\Command.cs" />
+    <Compile Include="Domain\FilesClearType.cs" />
     <Compile Include="Domain\ApplicationConstants.cs" />
     <Compile Include="Extensions\EnumExtensions.cs" />
     <Compile Include="Localization\ActionPanelStrings.Designer.cs">
@@ -151,6 +152,7 @@
     <Compile Include="Models\File.cs" />
     <Compile Include="Domain\FileExtension.cs" />
     <Compile Include="Domain\FileType.cs" />
+    <Compile Include="Services\FilesClearStrategy\IFilesClearStrategy.cs" />
     <Compile Include="Services\FilesComparerService\IFilesComparerTemplateMethod.cs" />
     <Compile Include="Services\FilesComparerService\RemoveUniqueFilesComparerTemplateMethod.cs" />
     <Compile Include="Services\FilesInfoProvider\FilesInfoTextProvider.cs" />

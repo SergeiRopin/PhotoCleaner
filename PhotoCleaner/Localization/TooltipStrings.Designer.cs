@@ -61,6 +61,24 @@ namespace PhotoCleaner.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Удалить файлы.
+        /// </summary>
+        public static string ActionButtonDelete {
+            get {
+                return ResourceManager.GetString("ActionButtonDelete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Переместить файлы.
+        /// </summary>
+        public static string ActionButtonMove {
+            get {
+                return ResourceManager.GetString("ActionButtonMove", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Файлы, подсвеченные красным,
         ///будут удалены безвозвратно.
         /// </summary>

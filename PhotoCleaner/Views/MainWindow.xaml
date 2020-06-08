@@ -120,7 +120,8 @@
                   MinWidth="110" Margin="21 0 5 0"/>
 
                 <StackPanel Grid.Column="1" Orientation="Horizontal" FlowDirection="RightToLeft" Margin="0 0 5 0">
-                    <Button Command="{Binding OpenFilesCommand}" CommandParameter="{x:Static domain:FileType.Target}" 
+                    <Button Command="{Binding OpenFilesCommand}" 
+                            CommandParameter="{x:Static domain:FileType.Target}" 
                             Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" 
                             materialDesign:ShadowAssist.ShadowDepth="Depth4"
                             ToolTip="MaterialDesignFloatingActionMiniLightButton"
@@ -132,7 +133,7 @@
             </Grid>
             <Grid Grid.Row="2" Grid.Column="2" Margin="5 10 5 0">
                 <ComboBox IsEditable="True" Name="comboBoxTarget" Text="{Binding SelectedTargetDirectory}" MouseEnter="btnLeftOpen_MouseEnter" MouseLeave="MouseLeaveArea"
-                      materialDesign:HintAssist.Hint="{x:Static localization:SourceFileStrings.SelectDirectory}"
+                      materialDesign:HintAssist.Hint="{x:Static localization:TargetFileStrings.SelectDirectory}"
                       ItemsSource="{Binding LongListToTestComboVirtualization}"
                       Style="{StaticResource MaterialDesignFloatingHintComboBox}">
                     <i:Interaction.Triggers>
@@ -182,34 +183,47 @@
                     VerticalAlignment="Center" 
                     Orientation="Horizontal">
                     <RadioButton
-                        Style="{StaticResource MaterialDesignTabRadioButton}"
-                        Margin="4"
-                        IsChecked="True"
+                        Command="{Binding UpdateFilesClearAction}"
+                        CommandParameter="{x:Static domain:FilesClearType.Move}"
                         Content="{x:Static localization:ActionPanelStrings.Move}"
-                        ToolTip="{x:Static localization:TooltipStrings.ActionPanelMove}" />
-                    <RadioButton
+                        ToolTip="{x:Static localization:TooltipStrings.ActionPanelMove}"
                         Style="{StaticResource MaterialDesignTabRadioButton}"
                         Margin="4"
+                        IsChecked="True"/>
+                    <RadioButton
+                        Command="{Binding UpdateFilesClearAction}"
+                        CommandParameter="{x:Static domain:FilesClearType.Delete}"
                         Content="{x:Static localization:ActionPanelStrings.Delete}"
-                        ToolTip="{x:Static localization:TooltipStrings.ActionPanelDelete}" />
+                        ToolTip="{x:Static localization:TooltipStrings.ActionPanelDelete}"
+                        Style="{StaticResource MaterialDesignTabRadioButton}"
+                        Margin="4"/>
                 </StackPanel>
             </GroupBox>
             <WrapPanel x:Name="actionControl" 
                        Grid.Column="2" 
                        Style="{StaticResource ActionControl}"
-                       IsEnabled="False">
+                       IsEnabled="{Binding IsActionButtonEnabled}">
                 <TextBlock x:Name="actionControlTextBlock" 
                            Text="{x:Static localization:ActionPanelStrings.Clear}" 
                            Style="{StaticResource ActionControlTextBlock}"/>
                 <Button 
+                    x:Name="actionButton"
                     Style="{StaticResource MaterialDesignFloatingActionButton}"
                     materialDesign:ButtonProgressAssist.IsIndicatorVisible="True"
                     materialDesign:ButtonProgressAssist.Value="-1"
-                    materialDesign:ButtonProgressAssist.IsIndeterminate="True" >
+                    materialDesign:ButtonProgressAssist.IsIndeterminate="True"
+                    ToolTip="{Binding ActionButtonTooltip}">
                     <materialDesign:PackIcon Height="33" Width="33">
                         <materialDesign:PackIcon.Style>
                             <Style TargetType="materialDesign:PackIcon">
-                                <Setter Property="Kind" Value="DeleteForeverOutline" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding FilesClearAction}" Value="{x:Static domain:FilesClearType.Move}">
+                                        <Setter Property="Kind" Value="FileMoveOutline" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding FilesClearAction}" Value="{x:Static domain:FilesClearType.Delete}">
+                                        <Setter Property="Kind" Value="FileRemoveOutline" />
+                                    </DataTrigger>
+                                </Style.Triggers>   
                             </Style>
                         </materialDesign:PackIcon.Style>
                     </materialDesign:PackIcon>

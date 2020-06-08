@@ -70,7 +70,7 @@ namespace PhotoCleaner.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Здесь выберите все очищенные и отредактированные фото, которые вы не хотите утратить после очистки.
+        ///   Looks up a localized string similar to Выберите все очищенные и отредактированные фото, которые вы не хотите утратить после очистки.
         /// </summary>
         public static string Header {
             get {
@@ -79,7 +79,7 @@ namespace PhotoCleaner.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Выберите путь к файлам.
+        ///   Looks up a localized string similar to Путь к файлам.
         /// </summary>
         public static string SelectDirectory {
             get {

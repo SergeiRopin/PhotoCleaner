@@ -121,10 +121,10 @@
     <value>Расширение</value>
   </data>
   <data name="Header" xml:space="preserve">
-    <value>Здесь выберите все очищенные и отредактированные фото, которые вы не хотите утратить после очистки</value>
+    <value>Выберите все очищенные и отредактированные фото, которые вы не хотите утратить после очистки</value>
   </data>
   <data name="SelectDirectory" xml:space="preserve">
-    <value>Выберите путь к файлам</value>
+    <value>Путь к файлам</value>
   </data>
   <data name="SelectExtension" xml:space="preserve">
     <value>Выберите расширение</value>

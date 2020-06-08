@@ -121,7 +121,10 @@
     <value>Расширение</value>
   </data>
   <data name="Header" xml:space="preserve">
-    <value>Здесь выберите все НЕочищенные фото, которые содержат дубликаты, подлежащие удалению</value>
+    <value>Выберите все НЕочищенные фото, которые содержат дубликаты, подлежащие удалению</value>
+  </data>
+  <data name="SelectDirectory" xml:space="preserve">
+    <value>Путь к файлам</value>
   </data>
   <data name="SelectExtension" xml:space="preserve">
     <value>Выберите расширение</value>
