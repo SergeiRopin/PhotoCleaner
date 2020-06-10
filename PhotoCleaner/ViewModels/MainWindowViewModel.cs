@@ -220,10 +220,10 @@ namespace PhotoCleaner.ViewModels
 
         private async void ClearFilesUserConsentDialog(object o)
         {
-            string clearFilesDialogMessage = string.Format(ActionPanelStrings.ClearFilesDialogMessage,
+            string clearFilesDialogMessage = string.Format(DialogWindowStrings.ClearFilesDialogMessage,
                 FilesClearAction == FilesClearType.Move
-                ? ActionPanelStrings.Move.ToLower()
-                : ActionPanelStrings.Delete.ToLower());
+                ? DialogWindowStrings.Move.ToLower()
+                : DialogWindowStrings.Delete.ToLower());
 
             var view = new UserConsentDialogContent
             {
@@ -250,6 +250,8 @@ namespace PhotoCleaner.ViewModels
             switch (filesClearType)
             {
                 case FilesClearType.Move:
+                    filesClearStrategy = new FilesMoveStrategy(this);
+                    result = await filesClearStrategy.ClearFiles();
                     break;
                 case FilesClearType.Delete:
                     filesClearStrategy = new FilesDeleteStrategy(this);

@@ -121,7 +121,7 @@
     <value>Кажется, файлы уже очищены!</value>
   </data>
   <data name="RemovableFiles" xml:space="preserve">
-    <value>Будет удалено</value>
+    <value>Будет очищено</value>
   </data>
   <data name="SelectedFiles" xml:space="preserve">
     <value>Выбрано файлов</value>

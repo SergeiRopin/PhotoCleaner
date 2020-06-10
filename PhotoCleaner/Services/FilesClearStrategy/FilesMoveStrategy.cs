@@ -11,13 +11,13 @@ using System.Threading.Tasks;
 
 namespace PhotoCleaner.Services.FilesClearStrategy
 {
-    public class FilesDeleteStrategy : IFilesClearStrategy
+    public class FilesMoveStrategy : IFilesClearStrategy
     {
         INotifyPropertyChanged _viewModel;
         bool _hasErrors = false;
         bool _filesNotFound = true;
 
-        public FilesDeleteStrategy(INotifyPropertyChanged viewModel)
+        public FilesMoveStrategy(INotifyPropertyChanged viewModel)
         {
             _viewModel = viewModel;
         }
@@ -36,51 +36,56 @@ namespace PhotoCleaner.Services.FilesClearStrategy
                 .Where(x => !string.IsNullOrEmpty(x.NameWithoutExtension))
                 .Select(x => x.NameWithoutExtension);
 
-            var namesToRemove = targetFiles.Except(sourceFiles).ToArray();
+            var namesToMove = targetFiles.Except(sourceFiles).ToArray();
 
-            var filesToRemove = new List<string>();
+            var filesToMove = new List<string>();
             var targetFileExtension = mainViewModel.TargetFiles.First(x => !string.IsNullOrEmpty(x.NameWithoutExtension)).Extension;
-            filesToRemove.AddRange(
-                namesToRemove.Select(name => 
+            filesToMove.AddRange(
+                namesToMove.Select(name =>
                 Path.Combine(mainViewModel.SelectedTargetDirectory, name) + targetFileExtension));
 
-            await RemoveFiles(filesToRemove, mainViewModel.TargetFiles).ConfigureAwait(true);
+            var parentDir = Directory.GetParent(mainViewModel.SelectedTargetDirectory).FullName;
+            var currentDir = new DirectoryInfo(mainViewModel.SelectedTargetDirectory).Name;
+            var directoryToMove = Directory.CreateDirectory(Path.Combine(parentDir, $"{currentDir}.ClearedFiles")).FullName;
+
+            await MoveFiles(filesToMove, directoryToMove, mainViewModel.TargetFiles).ConfigureAwait(true);
 
             if (_hasErrors)
             {
                 return new ClearOperationResult
                 {
                     Type = ClearOperationResultType.Fail,
-                    Message = DialogWindowStrings.DeleteFail
+                    Message = DialogWindowStrings.MoveFail
                 };
             }
-            if(!_hasErrors && _filesNotFound)
+            if (!_hasErrors && _filesNotFound)
             {
                 return new ClearOperationResult
                 {
                     Type = ClearOperationResultType.NotFound,
-                    Message = DialogWindowStrings.DeleteNotFound
+                    Message = DialogWindowStrings.MoveNotFound
                 };
             }
             return new ClearOperationResult
             {
                 Type = ClearOperationResultType.Success,
-                Message = DialogWindowStrings.DeleteSuccess
+                Message = string.Format(DialogWindowStrings.MoveSuccess, directoryToMove)
             };
         }
 
-        private async Task RemoveFiles(List<string> filesToRemove, ObservableCollection<Models.@File> targetFiles)
+        private async Task MoveFiles(List<string> filesToMove, string directoryToMove, ObservableCollection<Models.File> targetFiles)
         {
-            foreach (var file in filesToRemove)
+            foreach (var srcFile in filesToMove)
             {
                 try
                 {
                     //Workaround to prevent System.UnauthorizedAccessException: Access to the path 'pathToFile' is denied. 
-                    File.SetAttributes(file, FileAttributes.Normal);
+                    File.SetAttributes(srcFile, FileAttributes.Normal);
 
-                    await Task.Run(() => File.Delete(file)).ConfigureAwait(true);
-                    var removedFile = targetFiles.First(x => x.Path == file);
-                    targetFiles.Remove(removedFile);
+                    string destFileName = $"{directoryToMove}\\{Path.GetFileName(srcFile)}";
+                    await Task.Run(() => File.Move(srcFile, destFileName)).ConfigureAwait(true);
+                    var movedFile = targetFiles.First(x => x.Path == srcFile);
+                    targetFiles.Remove(movedFile);
                 }
                 catch (Exception ex)
                 {

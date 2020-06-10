@@ -70,6 +70,92 @@ namespace PhotoCleaner.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Вы действительно хотите {0} файлы?.
+        /// </summary>
+        public static string ClearFilesDialogMessage {
+            get {
+                return ResourceManager.GetString("ClearFilesDialogMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Удалить.
+        /// </summary>
+        public static string Delete {
+            get {
+                return ResourceManager.GetString("Delete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Произошла ошибка.
+        ///Некоторые файлы не были удалены.
+        /// </summary>
+        public static string DeleteFail {
+            get {
+                return ResourceManager.GetString("DeleteFail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Файлы не найдены.
+        ///Возможно они были удалены ранее.
+        /// </summary>
+        public static string DeleteNotFound {
+            get {
+                return ResourceManager.GetString("DeleteNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Файлы успешно удалены.
+        /// </summary>
+        public static string DeleteSuccess {
+            get {
+                return ResourceManager.GetString("DeleteSuccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Переместить.
+        /// </summary>
+        public static string Move {
+            get {
+                return ResourceManager.GetString("Move", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Произошла ошибка.
+        ///Некоторые файлы не были перемещены.
+        /// </summary>
+        public static string MoveFail {
+            get {
+                return ResourceManager.GetString("MoveFail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Файлы не найдены.
+        ///Возможно они были очищены ранее.
+        /// </summary>
+        public static string MoveNotFound {
+            get {
+                return ResourceManager.GetString("MoveNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Файлы успешно перемещены в папку
+        ///{0}.
+        /// </summary>
+        public static string MoveSuccess {
+            get {
+                return ResourceManager.GetString("MoveSuccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to OK.
         /// </summary>
         public static string Ok {

@@ -70,7 +70,7 @@ namespace PhotoCleaner.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Будет удалено.
+        ///   Looks up a localized string similar to Будет очищено.
         /// </summary>
         public static string RemovableFiles {
             get {

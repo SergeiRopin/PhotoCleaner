@@ -164,6 +164,7 @@
     <Compile Include="Domain\FileExtension.cs" />
     <Compile Include="Domain\FileType.cs" />
     <Compile Include="Services\FilesClearStrategy\FilesDeleteStrategy.cs" />
+    <Compile Include="Services\FilesClearStrategy\FilesMoveStrategy.cs" />
     <Compile Include="Services\FilesClearStrategy\IFilesClearStrategy.cs" />
     <Compile Include="Services\FilesComparerService\IFilesComparerTemplateMethod.cs" />
     <Compile Include="Services\FilesComparerService\ClearUniqueFilesComparerTemplateMethod.cs" />
@@ -202,7 +203,6 @@
     </Compile>
     <Compile Include="Services\DialogService\DefaultDialogService.cs" />
     <Compile Include="Services\DialogService\IDialogService.cs" />
-    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Views\InfoDialogContent.xaml.cs">
       <DependentUpon>InfoDialogContent.xaml</DependentUpon>
     </Compile>
@@ -263,6 +263,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="..\.editorconfig">
+      <Link>.editorconfig</Link>
+    </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
