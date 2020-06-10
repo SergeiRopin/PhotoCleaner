@@ -1,0 +1,57 @@
+﻿<UserControl x:Class="PhotoCleaner.Views.InfoDialogContent"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:domain="clr-namespace:PhotoCleaner.Domain"
+             xmlns:localization="clr-namespace:PhotoCleaner.Localization">
+
+    <StackPanel Margin="16 16 16 10">
+        <WrapPanel Orientation="Horizontal">
+            <materialDesign:PackIcon 
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                Width="25" Height="25"
+                Margin="0 0 20 0">
+                <materialDesign:PackIcon.Style>
+                    <Style TargetType="materialDesign:PackIcon">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Type}" Value="{x:Static domain:InfoDialogType.Success}">
+                                <Setter Property="Kind" Value="CheckboxMarkedCircle" />
+                                <Setter Property="Foreground" Value="ForestGreen"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Type}" Value="{x:Static domain:InfoDialogType.Error}">
+                                <Setter Property="Kind" Value="AlertCircle" />
+                                <Setter Property="Foreground" Value="OrangeRed"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Type}" Value="{x:Static domain:InfoDialogType.NotFound}">
+                                <Setter Property="Kind" Value="Alert" />
+                                <Setter Property="Foreground" Value="Gold"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </materialDesign:PackIcon.Style>
+            </materialDesign:PackIcon>
+            <TextBlock 
+                Text="{Binding Message}"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                FontSize="14"/>   
+        </WrapPanel>
+        <Button
+            Content="{x:Static localization:DialogWindowStrings.Ok}"
+            Style="{StaticResource MaterialDesignFlatButton}"
+            IsDefault="True"
+            Margin="10 8 8 0"
+            Command="materialDesign:DialogHost.CloseDialogCommand"
+            HorizontalAlignment="Right">
+            <Button.CommandParameter>
+                <system:Boolean xmlns:system="clr-namespace:System;assembly=mscorlib">
+                    False
+                </system:Boolean>
+            </Button.CommandParameter>
+        </Button>
+    </StackPanel>
+</UserControl>

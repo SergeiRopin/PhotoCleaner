@@ -7,7 +7,7 @@ using System.Windows;
 
 namespace PhotoCleaner.Services.FilesComparerService
 {
-    public class RemoveUniqueFilesComparerTemplateMethod : IFilesComparerTemplateMethod
+    public class ClearUniqueFilesComparerTemplateMethod : IFilesComparerTemplateMethod
     {
         private IEnumerable<File> _filesToRemove;
         public override void CleanEmptySpaces(IEnumerable<@File> sourceFiles, IEnumerable<@File> targetFiles)

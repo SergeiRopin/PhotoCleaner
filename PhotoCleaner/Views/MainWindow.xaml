@@ -16,224 +16,232 @@
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="{DynamicResource MaterialDesignFont}"
         Title="Photo Cleaner" Width="1000" Height="650" Margin="0">
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
-        <Grid Grid.ColumnSpan="2" Margin="0 0 0 0">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
+    <materialDesign:DialogHost
+        Identifier="RootDialog"
+        IsOpen="False"
+        CloseOnClickAway="True"
+        OverlayBackground="SlateGray">
+        
+        <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="*" />
+                <ColumnDefinition/>
+                <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-
-            <TextBlock Text="{x:Static localization:SourceFileStrings.Header}" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="16" Margin="5 15 5 15"/>
-            <Grid Grid.Row="1" Margin="0 0 0 5">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid Grid.ColumnSpan="2" Margin="0 0 0 0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <ComboBox ItemsSource="{Binding FileExtensions}" SelectedItem="{Binding SelectedSourceExtension}"
-                      Style="{StaticResource MaterialDesignFloatingHintComboBox}"
-                      materialDesign:HintAssist.Hint="{x:Static localization:SourceFileStrings.Extension}"
-                      materialDesign:HintAssist.HelperText="{x:Static localization:SourceFileStrings.SelectExtension}"
-                      MinWidth="110" Margin="21 0 5 0"/>
-                <StackPanel Grid.Column="1" Orientation="Horizontal" FlowDirection="RightToLeft" HorizontalAlignment="Right" Margin="0 0 5 0">
-                    <Button Command="{Binding OpenFilesCommand}" CommandParameter="{x:Static domain:FileType.Source}" 
-                            Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
-                            materialDesign:ShadowAssist.ShadowDepth="Depth4"
-                            ToolTip="MaterialDesignFloatingActionMiniLightButton"
-                            Height="35" Width="35">
-                        <materialDesign:PackIcon Kind="FolderDownloadOutline" Height="24" Width="24"/>
-                    </Button>
-                    <TextBlock Text="{Binding SelectedSourceFilesMessage}" TextWrapping="WrapWithOverflow"  Height="Auto" VerticalAlignment="Center" Margin="5 0 0 0"/>
-                </StackPanel>
-            </Grid>
-
-            <GridSplitter Grid.Column="1" Grid.RowSpan="4" Style="{StaticResource VerticalGridSplitter}" />
-
-            <Grid Grid.Row="2" Margin="5 10 5 0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="15"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <Border BorderBrush="Gray" BorderThickness="0 0 0 1">
-                    <TextBlock VerticalAlignment="Bottom" Height="23">
-                        <materialDesign:PackIcon Kind="ChevronRight" />
-                    </TextBlock> 
-                </Border>
-                
-                <ComboBox Grid.Column="1"  Name="comboBoxSource" IsEditable="True" 
-                          Text="{Binding SelectedSourceDirectory}" 
-                          MouseEnter="btnLeftOpen_MouseEnter" MouseLeave="MouseLeaveArea"                      
-                          materialDesign:HintAssist.Hint="{x:Static localization:SourceFileStrings.SelectDirectory}"
-                          ItemsSource="{Binding LongListToTestComboVirtualization}"
-                          Style="{StaticResource MaterialDesignFloatingHintComboBox}">
-                    <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="DropDownOpened">
-                            <i:InvokeCommandAction Command="{Binding OpenFilesCommand}" CommandParameter="{x:Static domain:FileType.Source}" />
-                        </i:EventTrigger>
-                    </i:Interaction.Triggers>
-                </ComboBox>
-            </Grid>
-            <DockPanel LastChildFill="True" Grid.Row="3">
-                <!--This element is used to stretch ListBox in height-->
-                <TextBlock DockPanel.Dock="Top" Height="0"/>
-                <Border x:Name="sourceFilesInfoBlockBorder" DockPanel.Dock="Bottom" Style="{StaticResource SourceFilesInfoBlock}">
-                    <TextBlock x:Name="sourceFilesInfoBlock" Style="{DynamicResource SourceFilesInfoText}">
-                        <Run Text="{Binding SourceFilesInfo}" Style="{StaticResource FilesInfoMessage}"/>
-                    </TextBlock>
-                </Border>
-                <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="5 0 5 0">
-                    <ListBox x:Name="sourceFiles" ItemsSource="{Binding SourceFiles}" ItemContainerStyle="{DynamicResource FilesComparisonStyle}" BorderBrush="Gray" BorderThickness="0.5 0 0.5 0.5" >
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Name}" />
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
-                </ScrollViewer>
-            </DockPanel>
-
-            <TextBlock Grid.Column="2" Text="{x:Static localization:TargetFileStrings.Header}" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="16" Margin="5 15 5 15"/>
-            <Grid Grid.Row="1" Grid.Column="2" Margin="0 0 0 5">
-                <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                <ComboBox ItemsSource="{Binding FileExtensions}" SelectedItem="{Binding SelectedTargetExtension}"
-                  Style="{StaticResource MaterialDesignFloatingHintComboBox}"
-                  materialDesign:HintAssist.Hint="{x:Static localization:TargetFileStrings.Extension}"
-                  materialDesign:HintAssist.HelperText="{x:Static localization:TargetFileStrings.SelectExtension}"
-                  MinWidth="110" Margin="21 0 5 0"/>
 
-                <StackPanel Grid.Column="1" Orientation="Horizontal" FlowDirection="RightToLeft" Margin="0 0 5 0">
-                    <Button Command="{Binding OpenFilesCommand}" 
-                            CommandParameter="{x:Static domain:FileType.Target}" 
-                            Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" 
-                            materialDesign:ShadowAssist.ShadowDepth="Depth4"
-                            ToolTip="MaterialDesignFloatingActionMiniLightButton"
-                            Height="35" Width="35">
-                        <materialDesign:PackIcon Kind="FolderDownloadOutline" Height="24" Width="24"/>
+                <TextBlock Text="{x:Static localization:SourceFileStrings.Header}" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="16" Margin="5 15 5 15"/>
+                <Grid Grid.Row="1" Margin="0 0 0 5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <ComboBox ItemsSource="{Binding FileExtensions}" SelectedItem="{Binding SelectedSourceExtension}"
+                          Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+                          materialDesign:HintAssist.Hint="{x:Static localization:SourceFileStrings.Extension}"
+                          materialDesign:HintAssist.HelperText="{x:Static localization:SourceFileStrings.SelectExtension}"
+                          MinWidth="110" Margin="21 0 5 0"/>
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" FlowDirection="RightToLeft" HorizontalAlignment="Right" Margin="0 0 5 0">
+                        <Button Command="{Binding OpenFilesCommand}" CommandParameter="{x:Static domain:FileType.Source}" 
+                                Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
+                                materialDesign:ShadowAssist.ShadowDepth="Depth4"
+                                ToolTip="MaterialDesignFloatingActionMiniLightButton"
+                                Height="35" Width="35">
+                            <materialDesign:PackIcon Kind="FolderDownloadOutline" Height="24" Width="24"/>
+                        </Button>
+                        <TextBlock Text="{Binding SelectedSourceFilesMessage}" TextWrapping="WrapWithOverflow"  Height="Auto" VerticalAlignment="Center" Margin="5 0 0 0"/>
+                    </StackPanel>
+                </Grid>
+
+                <GridSplitter Grid.Column="1" Grid.RowSpan="4" Style="{StaticResource VerticalGridSplitter}" />
+
+                <Grid Grid.Row="2" Margin="5 10 5 0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="15"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Border BorderBrush="Gray" BorderThickness="0 0 0 1">
+                        <TextBlock VerticalAlignment="Bottom" Height="23">
+                            <materialDesign:PackIcon Kind="ChevronRight" />
+                        </TextBlock> 
+                    </Border>
+                
+                    <ComboBox Grid.Column="1"  Name="comboBoxSource" IsEditable="True" 
+                              Text="{Binding SelectedSourceDirectory}" 
+                              MouseEnter="btnLeftOpen_MouseEnter" MouseLeave="MouseLeaveArea"                      
+                              materialDesign:HintAssist.Hint="{x:Static localization:SourceFileStrings.SelectDirectory}"
+                              ItemsSource="{Binding LongListToTestComboVirtualization}"
+                              Style="{StaticResource MaterialDesignFloatingHintComboBox}">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="DropDownOpened">
+                                <i:InvokeCommandAction Command="{Binding OpenFilesCommand}" CommandParameter="{x:Static domain:FileType.Source}" />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </ComboBox>
+                </Grid>
+                <DockPanel LastChildFill="True" Grid.Row="3">
+                    <!--This element is used to stretch ListBox in height-->
+                    <TextBlock DockPanel.Dock="Top" Height="0"/>
+                    <Border x:Name="sourceFilesInfoBlockBorder" DockPanel.Dock="Bottom" Style="{StaticResource SourceFilesInfoBlock}">
+                        <TextBlock x:Name="sourceFilesInfoBlock" Style="{DynamicResource SourceFilesInfoText}">
+                            <Run Text="{Binding SourceFilesInfo}" Style="{StaticResource FilesInfoMessage}"/>
+                        </TextBlock>
+                    </Border>
+                    <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="5 0 5 0">
+                        <ListBox x:Name="sourceFiles" ItemsSource="{Binding SourceFiles}" ItemContainerStyle="{DynamicResource FilesComparisonStyle}" BorderBrush="Gray" BorderThickness="0.5 0 0.5 0.5" >
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Name}" />
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </ScrollViewer>
+                </DockPanel>
+
+                <TextBlock Grid.Column="2" Text="{x:Static localization:TargetFileStrings.Header}" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="16" Margin="5 15 5 15"/>
+                <Grid Grid.Row="1" Grid.Column="2" Margin="0 0 0 5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <ComboBox ItemsSource="{Binding FileExtensions}" SelectedItem="{Binding SelectedTargetExtension}"
+                      Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+                      materialDesign:HintAssist.Hint="{x:Static localization:TargetFileStrings.Extension}"
+                      materialDesign:HintAssist.HelperText="{x:Static localization:TargetFileStrings.SelectExtension}"
+                      MinWidth="110" Margin="21 0 5 0"/>
+
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" FlowDirection="RightToLeft" Margin="0 0 5 0">
+                        <Button Command="{Binding OpenFilesCommand}" 
+                                CommandParameter="{x:Static domain:FileType.Target}" 
+                                Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" 
+                                materialDesign:ShadowAssist.ShadowDepth="Depth4"
+                                ToolTip="MaterialDesignFloatingActionMiniLightButton"
+                                Height="35" Width="35">
+                            <materialDesign:PackIcon Kind="FolderDownloadOutline" Height="24" Width="24"/>
+                        </Button>
+                        <TextBlock Text="{Binding SelectedTargetFilesMessage}" TextWrapping="Wrap" Height="Auto" VerticalAlignment="Center" Margin="5 0 0 0"/>
+                    </StackPanel>
+                </Grid>
+                <Grid Grid.Row="2" Grid.Column="2" Margin="5 10 5 0">
+                    <ComboBox IsEditable="True" Name="comboBoxTarget" Text="{Binding SelectedTargetDirectory}" MouseEnter="btnLeftOpen_MouseEnter" MouseLeave="MouseLeaveArea"
+                          materialDesign:HintAssist.Hint="{x:Static localization:TargetFileStrings.SelectDirectory}"
+                          ItemsSource="{Binding LongListToTestComboVirtualization}"
+                          Style="{StaticResource MaterialDesignFloatingHintComboBox}">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="DropDownOpened">
+                                <i:InvokeCommandAction Command="{Binding OpenFilesCommand}" CommandParameter="{x:Static domain:FileType.Target}" />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </ComboBox>
+                </Grid>
+                <DockPanel LastChildFill="True" Grid.Row="3" Grid.Column="2" > 
+                    <!--This element is used to stretch ListBox in height-->
+                    <TextBlock DockPanel.Dock="Top" Height="0"/>
+                    <Border x:Name="targetFilesInfoBlockBorder" DockPanel.Dock="Bottom" Style="{StaticResource TargetFilesInfoBlock}">
+                        <TextBlock x:Name="targetFilesInfoBlock" Style="{DynamicResource TargetFilesInfoText}">
+                            <Run Text="{Binding TargetFilesInfo}" Style="{StaticResource FilesInfoMessage}"/>
+                            <Run Text="{Binding RemovableFilesInfo}" Style="{StaticResource FilesInfoWarning}"/>
+                        </TextBlock>
+                    </Border>
+                    <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="5 0 5 0">
+                        <ListBox x:Name="targetFiles" ItemsSource="{Binding TargetFiles}" ItemContainerStyle="{DynamicResource FilesComparisonStyle}" BorderBrush="Gray" BorderThickness="0.5 0 0.5 0.5">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel>
+                                        <TextBlock Text="{Binding Name}"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </ScrollViewer>
+                </DockPanel>
+            </Grid>
+            <Grid Grid.Row="1" 
+                  Grid.ColumnSpan="2" 
+                  x:Name="actionPanel">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>  
+                </Grid.ColumnDefinitions>
+                <!--Empty field to fill the space-->
+                <TextBlock/>
+                <GroupBox Grid.Column="1" 
+                          Name="selectActionGroupBox" 
+                          Header="{x:Static localization:ActionPanelStrings.SelectAction}" 
+                          Style="{StaticResource SelectActionGroupBox}">
+                    <StackPanel 
+                        VerticalAlignment="Center" 
+                        Orientation="Horizontal">
+                        <RadioButton
+                            Command="{Binding UpdateClearActionCommand}"
+                            CommandParameter="{x:Static domain:FilesClearType.Move}"
+                            Content="{x:Static localization:ActionPanelStrings.Move}"
+                            ToolTip="{x:Static localization:TooltipStrings.ActionPanelMove}"
+                            Style="{StaticResource MaterialDesignTabRadioButton}"
+                            Margin="4"
+                            IsChecked="True"/>
+                        <RadioButton
+                            Command="{Binding UpdateClearActionCommand}"
+                            CommandParameter="{x:Static domain:FilesClearType.Delete}"
+                            Content="{x:Static localization:ActionPanelStrings.Delete}"
+                            ToolTip="{x:Static localization:TooltipStrings.ActionPanelDelete}"
+                            Style="{StaticResource MaterialDesignTabRadioButton}"
+                            Margin="4"/>
+                    </StackPanel>
+                </GroupBox>
+                <WrapPanel x:Name="actionControl" 
+                           Grid.Column="2" 
+                           Style="{StaticResource ActionControl}"
+                           IsEnabled="{Binding IsActionButtonEnabled}">
+                    <TextBlock x:Name="actionControlTextBlock" 
+                               Text="{x:Static localization:ActionPanelStrings.Clear}" 
+                               Style="{StaticResource ActionControlTextBlock}"/>
+                    <Button x:Name="actionButton"
+                            Command="{Binding ClearFilesCommand}"
+                            Style="{StaticResource MaterialDesignFloatingActionButton}"
+                            materialDesign:ButtonProgressAssist.IsIndicatorVisible="True"
+                            materialDesign:ButtonProgressAssist.Value="-1"
+                            materialDesign:ButtonProgressAssist.IsIndeterminate="True"
+                            ToolTip="{Binding ActionButtonTooltip}">
+                        <materialDesign:PackIcon Height="33" Width="33">
+                            <materialDesign:PackIcon.Style>
+                                <Style TargetType="materialDesign:PackIcon">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding FilesClearAction}" Value="{x:Static domain:FilesClearType.Move}">
+                                            <Setter Property="Kind" Value="FileMoveOutline" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding FilesClearAction}" Value="{x:Static domain:FilesClearType.Delete}">
+                                            <Setter Property="Kind" Value="FileRemoveOutline" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </materialDesign:PackIcon.Style>
+                        </materialDesign:PackIcon>
                     </Button>
-                    <TextBlock Text="{Binding SelectedTargetFilesMessage}" TextWrapping="Wrap" Height="Auto" VerticalAlignment="Center" Margin="5 0 0 0"/>
-                </StackPanel>
+                </WrapPanel>
             </Grid>
-            <Grid Grid.Row="2" Grid.Column="2" Margin="5 10 5 0">
-                <ComboBox IsEditable="True" Name="comboBoxTarget" Text="{Binding SelectedTargetDirectory}" MouseEnter="btnLeftOpen_MouseEnter" MouseLeave="MouseLeaveArea"
-                      materialDesign:HintAssist.Hint="{x:Static localization:TargetFileStrings.SelectDirectory}"
-                      ItemsSource="{Binding LongListToTestComboVirtualization}"
-                      Style="{StaticResource MaterialDesignFloatingHintComboBox}">
-                    <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="DropDownOpened">
-                            <i:InvokeCommandAction Command="{Binding OpenFilesCommand}" CommandParameter="{x:Static domain:FileType.Target}" />
-                        </i:EventTrigger>
-                    </i:Interaction.Triggers>
-                </ComboBox>
-            </Grid>
-            <DockPanel LastChildFill="True" Grid.Row="3" Grid.Column="2" > 
-                <!--This element is used to stretch ListBox in height-->
-                <TextBlock DockPanel.Dock="Top" Height="0"/>
-                <Border x:Name="targetFilesInfoBlockBorder" DockPanel.Dock="Bottom" Style="{StaticResource TargetFilesInfoBlock}">
-                    <TextBlock x:Name="targetFilesInfoBlock" Style="{DynamicResource TargetFilesInfoText}">
-                        <Run Text="{Binding TargetFilesInfo}" Style="{StaticResource FilesInfoMessage}"/>
-                        <Run Text="{Binding RemovableFilesInfo}" Style="{StaticResource FilesInfoWarning}"/>
-                    </TextBlock>
-                </Border>
-                <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="5 0 5 0">
-                    <ListBox x:Name="targetFiles" ItemsSource="{Binding TargetFiles}" ItemContainerStyle="{DynamicResource FilesComparisonStyle}" BorderBrush="Gray" BorderThickness="0.5 0 0.5 0.5">
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <StackPanel>
-                                    <TextBlock Text="{Binding Name}"/>
-                                </StackPanel>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
-                </ScrollViewer>
-            </DockPanel>
+            <StatusBar Grid.Row="2" VerticalAlignment="Center" Grid.ColumnSpan="2">
+                <StatusBarItem>
+                    <TextBlock Name="statBarText" Text="Ready"/>
+                </StatusBarItem>
+            </StatusBar>
         </Grid>
-        <Grid Grid.Row="1" 
-              Grid.ColumnSpan="2" 
-              x:Name="actionPanel">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>  
-            </Grid.ColumnDefinitions>
-            <!--Empty field to fill the space-->
-            <TextBlock/>
-            <GroupBox Grid.Column="1" 
-                      Name="selectActionGroupBox" 
-                      Header="{x:Static localization:ActionPanelStrings.SelectAction}" 
-                      Style="{StaticResource SelectActionGroupBox}">
-                <StackPanel 
-                    VerticalAlignment="Center" 
-                    Orientation="Horizontal">
-                    <RadioButton
-                        Command="{Binding UpdateFilesClearAction}"
-                        CommandParameter="{x:Static domain:FilesClearType.Move}"
-                        Content="{x:Static localization:ActionPanelStrings.Move}"
-                        ToolTip="{x:Static localization:TooltipStrings.ActionPanelMove}"
-                        Style="{StaticResource MaterialDesignTabRadioButton}"
-                        Margin="4"
-                        IsChecked="True"/>
-                    <RadioButton
-                        Command="{Binding UpdateFilesClearAction}"
-                        CommandParameter="{x:Static domain:FilesClearType.Delete}"
-                        Content="{x:Static localization:ActionPanelStrings.Delete}"
-                        ToolTip="{x:Static localization:TooltipStrings.ActionPanelDelete}"
-                        Style="{StaticResource MaterialDesignTabRadioButton}"
-                        Margin="4"/>
-                </StackPanel>
-            </GroupBox>
-            <WrapPanel x:Name="actionControl" 
-                       Grid.Column="2" 
-                       Style="{StaticResource ActionControl}"
-                       IsEnabled="{Binding IsActionButtonEnabled}">
-                <TextBlock x:Name="actionControlTextBlock" 
-                           Text="{x:Static localization:ActionPanelStrings.Clear}" 
-                           Style="{StaticResource ActionControlTextBlock}"/>
-                <Button 
-                    x:Name="actionButton"
-                    Style="{StaticResource MaterialDesignFloatingActionButton}"
-                    materialDesign:ButtonProgressAssist.IsIndicatorVisible="True"
-                    materialDesign:ButtonProgressAssist.Value="-1"
-                    materialDesign:ButtonProgressAssist.IsIndeterminate="True"
-                    ToolTip="{Binding ActionButtonTooltip}">
-                    <materialDesign:PackIcon Height="33" Width="33">
-                        <materialDesign:PackIcon.Style>
-                            <Style TargetType="materialDesign:PackIcon">
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding FilesClearAction}" Value="{x:Static domain:FilesClearType.Move}">
-                                        <Setter Property="Kind" Value="FileMoveOutline" />
-                                    </DataTrigger>
-                                    <DataTrigger Binding="{Binding FilesClearAction}" Value="{x:Static domain:FilesClearType.Delete}">
-                                        <Setter Property="Kind" Value="FileRemoveOutline" />
-                                    </DataTrigger>
-                                </Style.Triggers>   
-                            </Style>
-                        </materialDesign:PackIcon.Style>
-                    </materialDesign:PackIcon>
-                </Button>
-            </WrapPanel>
-        </Grid>
-        <StatusBar Grid.Row="2" VerticalAlignment="Center" Grid.ColumnSpan="2">
-            <StatusBarItem>
-                <TextBlock Name="statBarText" Text="Ready"/>
-            </StatusBarItem>
-        </StatusBar>
-    </Grid>
+        
+    </materialDesign:DialogHost>
 </Window>

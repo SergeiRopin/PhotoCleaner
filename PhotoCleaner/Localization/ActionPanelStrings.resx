@@ -120,8 +120,22 @@
   <data name="Clear" xml:space="preserve">
     <value>Начать очистку</value>
   </data>
+  <data name="ClearFilesDialogMessage" xml:space="preserve">
+    <value>Вы действительно хотите {0} файлы?</value>
+  </data>
   <data name="Delete" xml:space="preserve">
     <value>Удалить</value>
+  </data>
+  <data name="DeleteFail" xml:space="preserve">
+    <value>Произошла ошибка.
+Некоторые файлы не были удалены</value>
+  </data>
+  <data name="DeleteNotFound" xml:space="preserve">
+    <value>Файлы не найдены.
+Возможно они были удалены ранее</value>
+  </data>
+  <data name="DeleteSuccess" xml:space="preserve">
+    <value>Файлы успешно удалены</value>
   </data>
   <data name="Move" xml:space="preserve">
     <value>Переместить</value>

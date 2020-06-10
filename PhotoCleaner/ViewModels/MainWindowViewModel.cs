@@ -11,6 +11,11 @@ using PhotoCleaner.Extensions;
 using PhotoCleaner.Services.FilesComparerService;
 using PhotoCleaner.Services.FilesInfoProvider;
 using PhotoCleaner.Domain;
+using System.Windows.Input;
+using MaterialDesignThemes.Wpf;
+using PhotoCleaner.Views;
+using PhotoCleaner.Services.FilesClearStrategy;
+using System.Threading;
 
 namespace PhotoCleaner.ViewModels
 {
@@ -32,8 +37,8 @@ namespace PhotoCleaner.ViewModels
         private FilesClearType _filesClearAction;
 
         public MainWindowViewModel(
-            IDialogService dialogService, 
-            IFilesComparerTemplateMethod filesComparer, 
+            IDialogService dialogService,
+            IFilesComparerTemplateMethod filesComparer,
             IFilesInfoProvider filesInfoProvider)
         {
             _dialogService = dialogService;
@@ -130,7 +135,7 @@ namespace PhotoCleaner.ViewModels
         public FilesClearType FilesClearAction
         {
             get => _filesClearAction;
-            set 
+            set
             {
                 _filesClearAction = value;
                 OnPropertyChanged("ActionButtonTooltip");
@@ -139,7 +144,7 @@ namespace PhotoCleaner.ViewModels
         }
         public string ActionButtonTooltip => FilesClearAction == FilesClearType.Move ? TooltipStrings.ActionButtonMove : TooltipStrings.ActionButtonDelete;
 
-        public Command OpenFilesCommand
+        public ICommand OpenFilesCommand
         {
             get
             {
@@ -174,16 +179,18 @@ namespace PhotoCleaner.ViewModels
             }
         }
 
-        public Command UpdateFilesClearAction
+        public ICommand UpdateClearActionCommand
         {
             get
             {
                 return new Command(obj =>
-                { 
+                {
                     FilesClearAction = (FilesClearType)Enum.Parse(typeof(FilesClearType), obj.ToString());
                 });
             }
         }
+
+        public ICommand ClearFilesCommand => new Command(ClearFilesUserConsentDialog);
 
         private bool CanOpenFileDialog(FileType type)
         {
@@ -210,7 +217,61 @@ namespace PhotoCleaner.ViewModels
                 files.Add(file);
             }
         }
-        
+
+        private async void ClearFilesUserConsentDialog(object o)
+        {
+            string clearFilesDialogMessage = string.Format(ActionPanelStrings.ClearFilesDialogMessage,
+                FilesClearAction == FilesClearType.Move
+                ? ActionPanelStrings.Move.ToLower()
+                : ActionPanelStrings.Delete.ToLower());
+
+            var view = new UserConsentDialogContent
+            {
+                DataContext = new UserConsentDialogViewModel(clearFilesDialogMessage)
+            };
+            await DialogHost.Show(view, "RootDialog", ClearFilesDialogClosingEventHandler);
+        }
+
+        private async void ClearFilesDialogClosingEventHandler(object sender, DialogClosingEventArgs eventArgs)
+        {
+            if (eventArgs.Parameter == null || (bool)eventArgs.Parameter == false)
+                return;
+
+            //lets cancel the close...
+            eventArgs.Cancel();
+
+            //update the "session" with progress bar content
+            ((DialogHost)eventArgs.OriginalSource).CloseOnClickAway = false;
+            eventArgs.Session.UpdateContent(new ProgressBarDialogContent());
+
+            var filesClearType = (FilesClearType)Enum.Parse(typeof(FilesClearType), FilesClearAction.ToString());
+            IFilesClearStrategy filesClearStrategy = null;
+            ClearOperationResult result = null;
+            switch (filesClearType)
+            {
+                case FilesClearType.Move:
+                    break;
+                case FilesClearType.Delete:
+                    filesClearStrategy = new FilesDeleteStrategy(this);
+                    result = await filesClearStrategy.ClearFiles();
+                    break;
+            }
+
+            if (SourceFiles.Any() && TargetFiles.Any())
+            {
+                _filesComparer.Compare(SourceFiles, TargetFiles);
+                TargetFilesInfo = _filesInfoProvider.GetFilesInfo(TargetFiles);
+                RemovableFilesInfo = _filesInfoProvider.GetComparisonInfo(SourceFiles, TargetFiles);
+            }
+
+            ((DialogHost)eventArgs.OriginalSource).CloseOnClickAway = true;
+            var view = new InfoDialogContent
+            {
+                DataContext = new InfoDialogViewModel(result.Message, result.Type)
+            };
+            eventArgs.Session.UpdateContent(view);
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName]string prop = "")
         {

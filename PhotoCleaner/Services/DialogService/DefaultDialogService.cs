@@ -26,7 +26,8 @@ namespace PhotoCleaner.Services.DialogService
                 {
                     Path = x,
                     Name = System.IO.Path.GetFileName(x),
-                    NameWithoutExtension = System.IO.Path.GetFileNameWithoutExtension(x)
+                    NameWithoutExtension = System.IO.Path.GetFileNameWithoutExtension(x),
+                    Extension = System.IO.Path.GetExtension(x)
                 });
                 if (SelectedFiles.Any())
                     SelectedDirectory = System.IO.Path.GetDirectoryName(SelectedFiles.First().Path);

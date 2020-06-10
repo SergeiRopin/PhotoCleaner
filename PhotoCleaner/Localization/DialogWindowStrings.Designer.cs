@@ -22,14 +22,14 @@ namespace PhotoCleaner.Localization {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class ActionPanelStrings {
+    public class DialogWindowStrings {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal ActionPanelStrings() {
+        internal DialogWindowStrings() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace PhotoCleaner.Localization {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("PhotoCleaner.Localization.ActionPanelStrings", typeof(ActionPanelStrings).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("PhotoCleaner.Localization.DialogWindowStrings", typeof(DialogWindowStrings).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,76 +61,29 @@ namespace PhotoCleaner.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Начать очистку.
+        ///   Looks up a localized string similar to ОТМЕНА.
         /// </summary>
-        public static string Clear {
+        public static string Cancel {
             get {
-                return ResourceManager.GetString("Clear", resourceCulture);
+                return ResourceManager.GetString("Cancel", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Вы действительно хотите {0} файлы?.
+        ///   Looks up a localized string similar to OK.
         /// </summary>
-        public static string ClearFilesDialogMessage {
+        public static string Ok {
             get {
-                return ResourceManager.GetString("ClearFilesDialogMessage", resourceCulture);
+                return ResourceManager.GetString("Ok", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Удалить.
+        ///   Looks up a localized string similar to ДА.
         /// </summary>
-        public static string Delete {
+        public static string Yes {
             get {
-                return ResourceManager.GetString("Delete", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Произошла ошибка.
-        ///Некоторые файлы не были удалены.
-        /// </summary>
-        public static string DeleteFail {
-            get {
-                return ResourceManager.GetString("DeleteFail", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Файлы не найдены.
-        ///Возможно они были удалены ранее.
-        /// </summary>
-        public static string DeleteNotFound {
-            get {
-                return ResourceManager.GetString("DeleteNotFound", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Файлы успешно удалены.
-        /// </summary>
-        public static string DeleteSuccess {
-            get {
-                return ResourceManager.GetString("DeleteSuccess", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Переместить.
-        /// </summary>
-        public static string Move {
-            get {
-                return ResourceManager.GetString("Move", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Что сделать с файлами?.
-        /// </summary>
-        public static string SelectAction {
-            get {
-                return ResourceManager.GetString("SelectAction", resourceCulture);
+                return ResourceManager.GetString("Yes", resourceCulture);
             }
         }
     }

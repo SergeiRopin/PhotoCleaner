@@ -18,7 +18,7 @@ namespace PhotoCleaner.Views
             InitializeComponent();
             DataContext = new MainWindowViewModel(
                 new DefaultDialogService(), 
-                new RemoveUniqueFilesComparerTemplateMethod(),
+                new ClearUniqueFilesComparerTemplateMethod(),
                 new FilesInfoTextProvider());
         }
 

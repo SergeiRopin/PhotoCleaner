@@ -20,6 +20,7 @@ namespace PhotoCleaner.Models
             }
         }
         public string NameWithoutExtension { get; set; } = string.Empty;
+        public string Extension { get; set; }
         public bool IsUnique
         {
             get => _isUnique;
@@ -44,29 +45,5 @@ namespace PhotoCleaner.Models
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
         }
-
-        //public override int GetHashCode()
-        //{
-        //    return Path.GetHashCode() 
-        //        ^ Name.GetHashCode() 
-        //        ^ NameWithoutExtension.GetHashCode() 
-        //        ^ IsUnique.GetHashCode() 
-        //        ^ IsEmpty.GetHashCode();
-        //}
-
-        //public override bool Equals(object obj)
-        //{
-        //    var item = obj as @File;
-        //    if (item == null)
-        //    {
-        //        return false;
-        //    }
-
-        //    return Path.Equals(item.Path) 
-        //        && Name.Equals(item.Name) 
-        //        && NameWithoutExtension.Equals(item.NameWithoutExtension) 
-        //        && IsUnique.Equals(item.IsUnique) 
-        //        && IsEmpty.Equals(item.IsEmpty);
-        //}
     }
 }

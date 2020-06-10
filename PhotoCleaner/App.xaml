@@ -8,6 +8,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <materialDesign:BundledTheme BaseTheme="Light" PrimaryColor="DeepPurple" SecondaryColor="Yellow" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.DialogHost.xaml" />
                 <ResourceDictionary Source="Resources/Styles/FilesInfoBlockStyles.xaml" />
                 <ResourceDictionary Source="Resources/Styles/ActionPanelStyles.xaml" />
             </ResourceDictionary.MergedDictionaries>

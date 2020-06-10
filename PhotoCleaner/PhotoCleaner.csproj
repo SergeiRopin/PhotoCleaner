@@ -57,6 +57,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>PhotoCleaner.App</StartupObject>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="MaterialDesignColors, Version=1.2.6.1513, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MaterialDesignColors.1.2.6\lib\net45\MaterialDesignColors.dll</HintPath>
@@ -116,13 +119,21 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Commands\Command.cs" />
+    <Compile Include="Domain\ClearOperationResult.cs" />
+    <Compile Include="Domain\ClearOperationResultType.cs" />
     <Compile Include="Domain\FilesClearType.cs" />
     <Compile Include="Domain\ApplicationConstants.cs" />
+    <Compile Include="Domain\InfoDialogType.cs" />
     <Compile Include="Extensions\EnumExtensions.cs" />
     <Compile Include="Localization\ActionPanelStrings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>ActionPanelStrings.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Localization\DialogWindowStrings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DialogWindowStrings.resx</DependentUpon>
     </Compile>
     <Compile Include="Localization\FilesInfoStrings.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -152,17 +163,32 @@
     <Compile Include="Models\File.cs" />
     <Compile Include="Domain\FileExtension.cs" />
     <Compile Include="Domain\FileType.cs" />
+    <Compile Include="Services\FilesClearStrategy\FilesDeleteStrategy.cs" />
     <Compile Include="Services\FilesClearStrategy\IFilesClearStrategy.cs" />
     <Compile Include="Services\FilesComparerService\IFilesComparerTemplateMethod.cs" />
-    <Compile Include="Services\FilesComparerService\RemoveUniqueFilesComparerTemplateMethod.cs" />
+    <Compile Include="Services\FilesComparerService\ClearUniqueFilesComparerTemplateMethod.cs" />
     <Compile Include="Services\FilesInfoProvider\FilesInfoTextProvider.cs" />
     <Compile Include="Services\FilesInfoProvider\IFilesInfoProvider.cs" />
+    <Compile Include="ViewModels\InfoDialogViewModel.cs" />
+    <Compile Include="ViewModels\UserConsentDialogViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Page Include="Resources\Styles\ActionPanelStyles.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Resources\Styles\FilesInfoBlockStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\InfoDialogContent.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ProgressBarDialogContent.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\UserConsentDialogContent.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -177,6 +203,15 @@
     <Compile Include="Services\DialogService\DefaultDialogService.cs" />
     <Compile Include="Services\DialogService\IDialogService.cs" />
     <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="Views\InfoDialogContent.xaml.cs">
+      <DependentUpon>InfoDialogContent.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ProgressBarDialogContent.xaml.cs">
+      <DependentUpon>ProgressBarDialogContent.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UserConsentDialogContent.xaml.cs">
+      <DependentUpon>UserConsentDialogContent.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -199,6 +234,10 @@
     <EmbeddedResource Include="Localization\ActionPanelStrings.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>ActionPanelStrings.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Localization\DialogWindowStrings.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>DialogWindowStrings.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Localization\FilesInfoStrings.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>

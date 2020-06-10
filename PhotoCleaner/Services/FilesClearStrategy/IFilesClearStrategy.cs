@@ -1,6 +1,10 @@
-﻿namespace PhotoCleaner.Services.FilesClearStrategy
+﻿using PhotoCleaner.Domain;
+using System.Threading.Tasks;
+
+namespace PhotoCleaner.Services.FilesClearStrategy
 {
-    class IFilesClearStrategy
+    public interface IFilesClearStrategy
     {
+        Task<ClearOperationResult> ClearFiles();
     }
 }

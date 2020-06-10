@@ -117,13 +117,13 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="NoFilesToRemove" xml:space="preserve">
-    <value>Кажется, файлы уже очищены!</value>
+  <data name="Cancel" xml:space="preserve">
+    <value>ОТМЕНА</value>
   </data>
-  <data name="RemovableFiles" xml:space="preserve">
-    <value>Будет удалено</value>
+  <data name="Ok" xml:space="preserve">
+    <value>OK</value>
   </data>
-  <data name="SelectedFiles" xml:space="preserve">
-    <value>Выбрано файлов</value>
+  <data name="Yes" xml:space="preserve">
+    <value>ДА</value>
   </data>
 </root>
