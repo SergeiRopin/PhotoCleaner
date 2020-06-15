@@ -121,7 +121,7 @@
     <value>Расширение</value>
   </data>
   <data name="Header" xml:space="preserve">
-    <value>Выберите все очищенные и отредактированные фото, которые вы не хотите утратить после очистки</value>
+    <value>Очищенные файлы</value>
   </data>
   <data name="SelectDirectory" xml:space="preserve">
     <value>Путь к файлам</value>

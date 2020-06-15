@@ -70,7 +70,7 @@ namespace PhotoCleaner.App.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Выберите все очищенные и отредактированные фото, которые вы не хотите утратить после очистки.
+        ///   Looks up a localized string similar to Очищенные файлы.
         /// </summary>
         public static string Header {
             get {

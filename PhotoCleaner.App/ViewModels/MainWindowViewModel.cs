@@ -13,8 +13,8 @@ using PhotoCleaner.App.Services.FilesInfoProvider;
 using PhotoCleaner.App.Domain;
 using System.Windows.Input;
 using MaterialDesignThemes.Wpf;
-using PhotoCleaner.App.Views;
 using PhotoCleaner.App.Services.FilesClearStrategy;
+using PhotoCleaner.App.Views.DialogWindows;
 
 namespace PhotoCleaner.App.ViewModels
 {
@@ -274,10 +274,6 @@ namespace PhotoCleaner.App.ViewModels
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
-        public void OnPropertyChanged([CallerMemberName]string prop = "")
-        {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs(prop));
-        }
+        public void OnPropertyChanged([CallerMemberName]string prop = "") => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
     }
 }

@@ -58,7 +58,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>PhotoCleaner.App.App</StartupObject>
+    <StartupObject>PhotoCleaner.App.Views.App</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="MaterialDesignColors, Version=1.2.6.1513, Culture=neutral, processorArchitecture=MSIL">
@@ -114,7 +114,7 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <ApplicationDefinition Include="App.xaml">
+    <ApplicationDefinition Include="Views\App.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
@@ -177,9 +177,27 @@
     <Compile Include="Services\FilesComparerService\ClearUniqueFilesComparerTemplateMethod.cs" />
     <Compile Include="Services\FilesInfoProvider\FilesInfoTextProvider.cs" />
     <Compile Include="Services\FilesInfoProvider\IFilesInfoProvider.cs" />
+    <Compile Include="ViewModels\HeaderViewModel.cs" />
     <Compile Include="ViewModels\InfoDialogViewModel.cs" />
+    <Compile Include="ViewModels\NotifyPropertyChanged.cs" />
     <Compile Include="ViewModels\UserConsentDialogViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
+    <Page Include="Resources\Styles\DirectorySelectionGroupStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\Styles\FilesComparisonGroupStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\Styles\FilesSelectionGroupStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\Styles\GridSplitterStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Resources\Styles\ActionPanelStyles.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -188,15 +206,27 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\InfoDialogContent.xaml">
+    <Page Include="Resources\Styles\HeaderStyles.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\ProgressBarDialogContent.xaml">
+    <Page Include="Resources\Styles\StatusBarStyles.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\UserConsentDialogContent.xaml">
+    <Page Include="Views\DialogWindows\InfoDialogContent.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\DialogWindows\ProgressBarDialogContent.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\DialogWindows\UserConsentDialogContent.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Header.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -204,20 +234,23 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Compile Include="App.xaml.cs">
+    <Compile Include="Views\App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Services\DialogService\DefaultDialogService.cs" />
     <Compile Include="Services\DialogService\IDialogService.cs" />
-    <Compile Include="Views\InfoDialogContent.xaml.cs">
+    <Compile Include="Views\DialogWindows\InfoDialogContent.xaml.cs">
       <DependentUpon>InfoDialogContent.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\ProgressBarDialogContent.xaml.cs">
+    <Compile Include="Views\DialogWindows\ProgressBarDialogContent.xaml.cs">
       <DependentUpon>ProgressBarDialogContent.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\UserConsentDialogContent.xaml.cs">
+    <Compile Include="Views\DialogWindows\UserConsentDialogContent.xaml.cs">
       <DependentUpon>UserConsentDialogContent.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Header.xaml.cs">
+      <DependentUpon>Header.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>

@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace PhotoCleaner.App.Views
+namespace PhotoCleaner.App.Views.DialogWindows
 {
     /// <summary>
     /// Interaction logic for ProgressBarDialogContent.xaml
