@@ -1,5 +1,6 @@
 ﻿using PhotoCleaner.App.Domain;
 using PhotoCleaner.App.Localization;
+using PhotoCleaner.App.Models;
 using PhotoCleaner.App.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -73,7 +74,7 @@ namespace PhotoCleaner.App.Services.FilesClearStrategy
             };
         }
 
-        private async Task MoveFiles(List<string> filesToMove, string directoryToMove, ObservableCollection<Models.File> targetFiles)
+        private async Task MoveFiles(List<string> filesToMove, string directoryToMove, ObservableCollection<SelectedFile> targetFiles)
         {
             foreach (var srcFile in filesToMove)
             {

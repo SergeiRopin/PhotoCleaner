@@ -7,7 +7,7 @@ namespace PhotoCleaner.App.Services.DialogService
 {
     public class DefaultDialogService : IDialogService
     {
-        public IEnumerable<@File> SelectedFiles { get; private set; }
+        public IEnumerable<SelectedFile> SelectedFiles { get; private set; }
         public string SelectedDirectory { get; set; }
 
         public bool OpenFileDialog(string fileExtension, string initialDirectory)
@@ -22,7 +22,7 @@ namespace PhotoCleaner.App.Services.DialogService
             if (openDialog.ShowDialog() == true)
             {
                 SelectedFiles = openDialog.FileNames.Select(x =>
-                new @File
+                new SelectedFile
                 {
                     Path = x,
                     Name = System.IO.Path.GetFileName(x),

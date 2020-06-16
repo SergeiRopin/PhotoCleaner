@@ -9,12 +9,12 @@ namespace PhotoCleaner.App.Services.FilesInfoProvider
 {
     public class FilesInfoTextProvider : IFilesInfoProvider
     {
-        public string GetFilesInfo(IEnumerable<@File> files)
+        public string GetFilesInfo(IEnumerable<SelectedFile> files)
         {
             return files.Any() ? $"{FilesInfoStrings.SelectedFiles}: {files.Count()}." : string.Empty;
         }
 
-        public string GetComparisonInfo(IEnumerable<@File> sourceFiles, IEnumerable<@File> targetFiles)
+        public string GetComparisonInfo(IEnumerable<SelectedFile> sourceFiles, IEnumerable<SelectedFile> targetFiles)
         {
             if (sourceFiles.Any() && targetFiles.Any())
             {

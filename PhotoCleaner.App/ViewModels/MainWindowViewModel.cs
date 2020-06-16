@@ -15,6 +15,8 @@ using System.Windows.Input;
 using MaterialDesignThemes.Wpf;
 using PhotoCleaner.App.Services.FilesClearStrategy;
 using PhotoCleaner.App.Views.DialogWindows;
+using PhotoCleaner.Database.Repository;
+using System.Threading.Tasks;
 
 namespace PhotoCleaner.App.ViewModels
 {
@@ -23,6 +25,7 @@ namespace PhotoCleaner.App.ViewModels
         private IDialogService _dialogService;
         private IFilesComparerTemplateMethod _filesComparer;
         private IFilesInfoProvider _filesInfoProvider;
+        private IDirectoriesRepository _directoryRepo;
 
         private string _selectedSourceDirectory;
         private string _selectedTargetDirectory;
@@ -38,11 +41,13 @@ namespace PhotoCleaner.App.ViewModels
         public MainWindowViewModel(
             IDialogService dialogService,
             IFilesComparerTemplateMethod filesComparer,
-            IFilesInfoProvider filesInfoProvider)
+            IFilesInfoProvider filesInfoProvider,
+            IDirectoriesRepository directoryRepo)
         {
             _dialogService = dialogService;
             _filesComparer = filesComparer;
             _filesInfoProvider = filesInfoProvider;
+            _directoryRepo = directoryRepo;
 
             if (FileExtensions.Any())
             {
@@ -50,11 +55,18 @@ namespace PhotoCleaner.App.ViewModels
                 SelectedTargetExtension = FileExtensions.First();
             }
             _filesClearAction = FilesClearType.Move;
+            SourceLastDirectories = new ObservableCollection<string>(
+                Task.Run(async () => await _directoryRepo.GetAllPagedAsync(5, FileType.Source.ToString())).Result);
+            TargetLastDirectories = new ObservableCollection<string>(
+                Task.Run(async () => await _directoryRepo.GetAllPagedAsync(5, FileType.Target.ToString())).Result);
+
         }
 
-        public ObservableCollection<@File> SourceFiles { get; private set; } = new ObservableCollection<@File>();
-        public ObservableCollection<@File> TargetFiles { get; private set; } = new ObservableCollection<@File>();
+        public ObservableCollection<SelectedFile> SourceFiles { get; private set; } = new ObservableCollection<SelectedFile>();
+        public ObservableCollection<SelectedFile> TargetFiles { get; private set; } = new ObservableCollection<SelectedFile>();
         public ObservableCollection<string> FileExtensions { get; } = new ObservableCollection<string>(Enum.GetNames(typeof(FileExtension)));
+        public ObservableCollection<string> SourceLastDirectories { get; private set; } = new ObservableCollection<string>();
+        public ObservableCollection<string> TargetLastDirectories { get; private set; } = new ObservableCollection<string>();
 
         public string SelectedSourceDirectory
         {
@@ -143,38 +155,37 @@ namespace PhotoCleaner.App.ViewModels
         }
         public string ActionButtonTooltip => FilesClearAction == FilesClearType.Move ? TooltipStrings.ActionButtonMove : TooltipStrings.ActionButtonDelete;
 
-        public ICommand OpenFilesCommand
+        public ICommand OpenFilesCommand => new Command(OpenFileDialogCommand);
+        
+        private async void OpenFileDialogCommand(object obj)
         {
-            get
+            FileType type = (FileType)Enum.Parse(typeof(FileType), obj.ToString());
+            if (CanOpenFileDialog(type))
             {
-                return new Command(obj =>
+                switch (type)
                 {
-                    FileType type = (FileType)Enum.Parse(typeof(FileType), obj.ToString());
-                    if (CanOpenFileDialog(type))
-                    {
-                        switch (type)
-                        {
-                            case FileType.Source:
-                                UpdateFiles(SourceFiles);
-                                SelectedSourceDirectory = _dialogService.SelectedDirectory;
-                                SourceFilesInfo = _filesInfoProvider.GetFilesInfo(SourceFiles);
-                                break;
-                            case FileType.Target:
-                                UpdateFiles(TargetFiles);
-                                SelectedTargetDirectory = _dialogService.SelectedDirectory;
-                                TargetFilesInfo = _filesInfoProvider.GetFilesInfo(TargetFiles);
-                                break;
-                            default:
-                                break;
-                        }
-                    }
+                    case FileType.Source:
+                        UpdateFiles(SourceFiles);
+                        SelectedSourceDirectory = _dialogService.SelectedDirectory;
+                        SourceFilesInfo = _filesInfoProvider.GetFilesInfo(SourceFiles);
+                        await UpdateSourceDirectories();
+                        break;
+                    case FileType.Target:
+                        UpdateFiles(TargetFiles);
+                        SelectedTargetDirectory = _dialogService.SelectedDirectory;
+                        TargetFilesInfo = _filesInfoProvider.GetFilesInfo(TargetFiles);
+                        await _directoryRepo.CreateOrUpdateAsync(SelectedTargetDirectory, FileType.Target.ToString());
+                        await UpdateTargetDirectories();
+                        break;
+                    default:
+                        break;
+                }
+            }
 
-                    if (SourceFiles.Any() && TargetFiles.Any())
-                    {
-                        _filesComparer.Compare(SourceFiles, TargetFiles);
-                        RemovableFilesInfo = _filesInfoProvider.GetComparisonInfo(SourceFiles, TargetFiles);
-                    }
-                });
+            if (SourceFiles.Any() && TargetFiles.Any())
+            {
+                _filesComparer.Compare(SourceFiles, TargetFiles);
+                RemovableFilesInfo = _filesInfoProvider.GetComparisonInfo(SourceFiles, TargetFiles);
             }
         }
 
@@ -206,10 +217,10 @@ namespace PhotoCleaner.App.ViewModels
             }
         }
 
-        private void UpdateFiles(ObservableCollection<@File> files)
+        private void UpdateFiles(ObservableCollection<SelectedFile> files)
         {
             if (files == null)
-                files = new ObservableCollection<File>();
+                files = new ObservableCollection<SelectedFile>();
             files.Clear();
             foreach (var file in _dialogService.SelectedFiles)
             {
@@ -271,6 +282,34 @@ namespace PhotoCleaner.App.ViewModels
                 DataContext = new InfoDialogViewModel(result.Message, result.Type)
             };
             eventArgs.Session.UpdateContent(view);
+        }
+
+        private async Task UpdateSourceDirectories()
+        {
+            await _directoryRepo.CreateOrUpdateAsync(SelectedSourceDirectory, FileType.Source.ToString());
+            var sourceDirectories = new ObservableCollection<string>(
+                await _directoryRepo.GetAllPagedAsync(5, FileType.Source.ToString()));
+            string selectedDirectory = SelectedSourceDirectory;
+            SourceLastDirectories.Clear();
+            foreach (var item in sourceDirectories)
+            {
+                SourceLastDirectories.Add(item);
+            }
+            SelectedSourceDirectory = selectedDirectory;
+        }
+
+        private async Task UpdateTargetDirectories()
+        {
+            await _directoryRepo.CreateOrUpdateAsync(SelectedTargetDirectory, FileType.Target.ToString());
+            var targetDirectories = new ObservableCollection<string>(
+                await _directoryRepo.GetAllPagedAsync(5, FileType.Target.ToString()));
+            string selectedDirectory = SelectedTargetDirectory;
+            TargetLastDirectories.Clear();
+            foreach (var item in targetDirectories)
+            {
+                TargetLastDirectories.Add(item);
+            }
+            SelectedTargetDirectory = selectedDirectory;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

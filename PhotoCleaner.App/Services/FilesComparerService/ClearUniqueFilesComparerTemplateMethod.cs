@@ -9,11 +9,11 @@ namespace PhotoCleaner.App.Services.FilesComparerService
 {
     public class ClearUniqueFilesComparerTemplateMethod : IFilesComparerTemplateMethod
     {
-        private IEnumerable<File> _filesToRemove;
-        public override void CleanEmptySpaces(IEnumerable<@File> sourceFiles, IEnumerable<@File> targetFiles)
+        private IEnumerable<SelectedFile> _filesToRemove;
+        public override void CleanEmptySpaces(IEnumerable<SelectedFile> sourceFiles, IEnumerable<SelectedFile> targetFiles)
         {
-            var source = sourceFiles as IList<@File>;
-            var target = targetFiles as IList<@File>;
+            var source = sourceFiles as IList<SelectedFile>;
+            var target = targetFiles as IList<SelectedFile>;
 
             if (source != null)
             {
@@ -31,20 +31,20 @@ namespace PhotoCleaner.App.Services.FilesComparerService
             }
         }
 
-        public override void SortFiles(IEnumerable<File> sourceFiles, IEnumerable<File> targetFiles)
+        public override void SortFiles(IEnumerable<SelectedFile> sourceFiles, IEnumerable<SelectedFile> targetFiles)
         {
             sourceFiles.OrderBy(x => x.NameWithoutExtension);
             targetFiles.OrderBy(x => x.NameWithoutExtension);
         }
 
-        public override void AddEmptySpaces(IEnumerable<@File> sourceFiles, IEnumerable<@File> targetFiles)
+        public override void AddEmptySpaces(IEnumerable<SelectedFile> sourceFiles, IEnumerable<SelectedFile> targetFiles)
         {
-            var source = sourceFiles as IList<@File>;
-            var target = targetFiles as IList<@File>;
+            var source = sourceFiles as IList<SelectedFile>;
+            var target = targetFiles as IList<SelectedFile>;
 
             if (source != null && target != null)
             {
-                var emptySpace = new @File { Name = string.Empty, IsEmpty = true };
+                var emptySpace = new SelectedFile { Name = string.Empty, IsEmpty = true };
                 int filesCount = target.Count > source.Count ? target.Count : source.Count;
                 int iteration = 1;
 
@@ -81,7 +81,7 @@ namespace PhotoCleaner.App.Services.FilesComparerService
             }
         }
 
-        public override void CleanRemovableFiles(IEnumerable<@File> sourceFiles, IEnumerable<@File> targetFiles)
+        public override void CleanRemovableFiles(IEnumerable<SelectedFile> sourceFiles, IEnumerable<SelectedFile> targetFiles)
         {
             _filesToRemove = targetFiles
                 .Where(x => !sourceFiles.Select(y => y.NameWithoutExtension).Contains(x.NameWithoutExtension))
@@ -96,7 +96,7 @@ namespace PhotoCleaner.App.Services.FilesComparerService
             }
         }
 
-        public override void FindRemovableFiles(IEnumerable<@File> sourceFiles, IEnumerable<@File> targetFiles)
+        public override void FindRemovableFiles(IEnumerable<SelectedFile> sourceFiles, IEnumerable<SelectedFile> targetFiles)
         {
             foreach (var file in _filesToRemove)
             {

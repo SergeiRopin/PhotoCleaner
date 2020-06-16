@@ -4,7 +4,6 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:domain="clr-namespace:PhotoCleaner.App.Domain"
-        xmlns:i="clr-namespace:Microsoft.Xaml.Behaviors;assembly=Microsoft.Xaml.Behaviors"
         xmlns:localization="clr-namespace:PhotoCleaner.App.Localization"
         mc:Ignorable="d"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
@@ -92,29 +91,23 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="15"/>
                         <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="18"/>
                     </Grid.ColumnDefinitions>
-                    <Border Style="{StaticResource DirectorySelectionPrefix}">
+                    <Border Style="{StaticResource DirectorySelectionBorder}">
                         <TextBlock Style="{StaticResource DirectorySelectionPrefixTextBlock}">
-                            <materialDesign:PackIcon Kind="ChevronRight" />
+                            <materialDesign:PackIcon Kind="ChevronRight"/>
                         </TextBlock> 
                     </Border>
-                
-                    <ComboBox Grid.Column="1"  
-                              Name="sourceComboBoxSource" 
-                              Text="{Binding SelectedSourceDirectory}" 
-                              MouseEnter="btnLeftOpen_MouseEnter" 
-                              MouseLeave="MouseLeaveArea"                      
-                              materialDesign:HintAssist.Hint="{x:Static localization:SourceFileStrings.SelectDirectory}"
-                              ItemsSource="{Binding LongListToTestComboVirtualization}"
-                              Style="{StaticResource DirectorySelectionComboBox}">
-                        <i:Interaction.Triggers>
-                            <i:EventTrigger EventName="DropDownOpened">
-                                <i:InvokeCommandAction 
-                                    Command="{Binding OpenFilesCommand}" 
-                                    CommandParameter="{x:Static domain:FileType.Source}" />
-                            </i:EventTrigger>
-                        </i:Interaction.Triggers>
-                    </ComboBox>
+                    <ComboBox 
+                        Grid.Column="1"  
+                        Name="sourceComboBox" 
+                        MouseEnter="btnLeftOpen_MouseEnter" 
+                        MouseLeave="MouseLeaveArea"                      
+                        materialDesign:HintAssist.Hint="{x:Static localization:SourceFileStrings.SelectDirectory}"
+                        ItemsSource="{Binding SourceLastDirectories}"
+                        SelectedValue="{Binding SelectedSourceDirectory}"
+                        Style="{StaticResource DirectorySelectionComboBox}"/>
+                    <Border Grid.Column="2" Style="{StaticResource DirectorySelectionBorder}"/>
                 </Grid>
                 <DockPanel LastChildFill="True" 
                            Grid.Row="3"
@@ -190,29 +183,24 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="15"/>
                         <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="17"/>
                     </Grid.ColumnDefinitions>
-                    <Border Style="{StaticResource DirectorySelectionPrefix}">
+                    <Border Style="{StaticResource DirectorySelectionBorder}">
                         <TextBlock Style="{StaticResource DirectorySelectionPrefixTextBlock}">
                             <materialDesign:PackIcon Kind="ChevronRight" />
                         </TextBlock>
                     </Border>
-
-                    <ComboBox Grid.Column="1"  
-                              Name="targetComboBox" 
-                              Text="{Binding SelectedTargetDirectory}" 
-                              MouseEnter="btnLeftOpen_MouseEnter" 
-                              MouseLeave="MouseLeaveArea"
-                              materialDesign:HintAssist.Hint="{x:Static localization:TargetFileStrings.SelectDirectory}"
-                              ItemsSource="{Binding LongListToTestComboVirtualization}"
-                              Style="{StaticResource DirectorySelectionComboBox}">
-                        <i:Interaction.Triggers>
-                            <i:EventTrigger EventName="DropDownOpened">
-                                <i:InvokeCommandAction 
-                                    Command="{Binding OpenFilesCommand}" 
-                                    CommandParameter="{x:Static domain:FileType.Target}" />
-                            </i:EventTrigger>
-                        </i:Interaction.Triggers>
-                    </ComboBox>
+                    <ComboBox 
+                        Grid.Column="1"  
+                        Name="targetComboBox" 
+                        Text="{Binding SelectedTargetDirectory}" 
+                        MouseEnter="btnLeftOpen_MouseEnter" 
+                        MouseLeave="MouseLeaveArea"
+                        materialDesign:HintAssist.Hint="{x:Static localization:TargetFileStrings.SelectDirectory}"
+                        ItemsSource="{Binding TargetLastDirectories}"
+                        SelectedItem="{Binding SelectedTargetDirectory}"
+                        Style="{StaticResource DirectorySelectionComboBox}"/>
+                    <Border Grid.Column="2" Style="{StaticResource DirectorySelectionBorder}"/>
                 </Grid>
                 <DockPanel Grid.Row="3"
                            Grid.Column="2"
@@ -247,7 +235,7 @@
                             </ListBox.ItemTemplate>
                         </ListBox>
                     </ScrollViewer>
-                </DockPanel>
+                </DockPanel> 
             </Grid>
             <Grid Grid.Row="1" 
                   Grid.ColumnSpan="2" 

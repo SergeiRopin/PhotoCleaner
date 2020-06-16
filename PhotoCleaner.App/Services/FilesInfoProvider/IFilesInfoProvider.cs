@@ -5,7 +5,7 @@ namespace PhotoCleaner.App.Services.FilesInfoProvider
 {
     public interface IFilesInfoProvider
     {
-        string GetFilesInfo(IEnumerable<@File> files);
-        string GetComparisonInfo(IEnumerable<@File> sourceFiles, IEnumerable<@File> targetFiles);
+        string GetFilesInfo(IEnumerable<SelectedFile> files);
+        string GetComparisonInfo(IEnumerable<SelectedFile> sourceFiles, IEnumerable<SelectedFile> targetFiles);
     }
 }

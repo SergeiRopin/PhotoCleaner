@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 
 namespace PhotoCleaner.App.Models
 {
-    public class @File : INotifyPropertyChanged
+    public class SelectedFile : INotifyPropertyChanged
     {
         private string _name = string.Empty;
         private bool _isUnique;

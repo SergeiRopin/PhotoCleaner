@@ -5,7 +5,7 @@ namespace PhotoCleaner.App.Services.FilesComparerService
 {
     public abstract class IFilesComparerTemplateMethod
     {
-        public void Compare(IEnumerable<@File> sourceFiles, IEnumerable<@File> targetFiles)
+        public void Compare(IEnumerable<SelectedFile> sourceFiles, IEnumerable<SelectedFile> targetFiles)
         {
             CleanEmptySpaces(sourceFiles, targetFiles);
             SortFiles(sourceFiles, targetFiles);
@@ -14,10 +14,10 @@ namespace PhotoCleaner.App.Services.FilesComparerService
             FindRemovableFiles(sourceFiles, targetFiles);
         }
 
-        public abstract void CleanEmptySpaces(IEnumerable<@File> sourceFiles, IEnumerable<@File> targetFiles);
-        public abstract void SortFiles(IEnumerable<@File> sourceFiles, IEnumerable<@File> targetFiles);
-        public abstract void AddEmptySpaces(IEnumerable<@File> sourceFiles, IEnumerable<@File> targetFiles);
-        public abstract void CleanRemovableFiles(IEnumerable<@File> sourceFiles, IEnumerable<@File> targetFiles);
-        public abstract void FindRemovableFiles(IEnumerable<@File> sourceFiles, IEnumerable<@File> targetFiles);
+        public abstract void CleanEmptySpaces(IEnumerable<SelectedFile> sourceFiles, IEnumerable<SelectedFile> targetFiles);
+        public abstract void SortFiles(IEnumerable<SelectedFile> sourceFiles, IEnumerable<SelectedFile> targetFiles);
+        public abstract void AddEmptySpaces(IEnumerable<SelectedFile> sourceFiles, IEnumerable<SelectedFile> targetFiles);
+        public abstract void CleanRemovableFiles(IEnumerable<SelectedFile> sourceFiles, IEnumerable<SelectedFile> targetFiles);
+        public abstract void FindRemovableFiles(IEnumerable<SelectedFile> sourceFiles, IEnumerable<SelectedFile> targetFiles);
     }
 }
