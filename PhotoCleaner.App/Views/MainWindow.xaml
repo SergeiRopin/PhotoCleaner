@@ -46,31 +46,29 @@
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 
-                <GridSplitter 
+                <GridSplitter x:Name="gridSplitter"
                     Grid.Column="1" 
                     Grid.RowSpan="4" 
                     Style="{StaticResource VerticalGridSplitter}" />
 
-                <TextBlock 
-                    x:Name="sourceHeader"
+                <TextBlock x:Name="sourceHeader"
                     Text="{x:Static localization:SourceFileStrings.Header}" 
                     Style="{StaticResource Header}" />
-                <Grid Grid.Row="1"
-                      x:Name="sourceFilesSelectionGroup"
+                <Grid x:Name="sourceFilesSelectionGroup"
+                      Grid.Row="1"
                       Style="{StaticResource FilesSelectionGroup}">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
-                    <ComboBox 
-                        x:Name="sourceExtensions"
+                    <ComboBox x:Name="sourceExtensions"
                         ItemsSource="{Binding FileExtensions}" 
                         SelectedItem="{Binding SelectedSourceExtension}"
                         Style="{StaticResource ExtensionsComboBox}"
                         materialDesign:HintAssist.Hint="{x:Static localization:SourceFileStrings.Extension}"
                         materialDesign:HintAssist.HelperText="{x:Static localization:SourceFileStrings.SelectExtension}"/>
-                    <StackPanel Grid.Column="1"
-                                x:Name="sourceFilesSelectionContainer"
+                    <StackPanel x:Name="sourceFilesSelectionContainer"
+                                Grid.Column="1"
                                 Style="{StaticResource FilesSelectionContainer}">
                         <Button x:Name="sourceFilesSelectionButton"
                                 Command="{Binding OpenFilesCommand}" 
@@ -78,15 +76,13 @@
                                 Style="{StaticResource FilesSelectionButton}">
                             <materialDesign:PackIcon Style="{StaticResource FilesSelectionButtonIcon}"/>
                         </Button>
-                        <TextBlock 
-                            x:Name="sourceFilesSelectionTextBlock"
+                        <TextBlock x:Name="sourceFilesSelectionTextBlock"
                             Text="{Binding SelectedSourceFilesMessage}" 
                             Style="{StaticResource FilesSelectionTextBlock}"/>
                     </StackPanel>
                 </Grid>
-
-                <Grid Grid.Row="2"
-                      x:Name="sourceDirectorySelectionGroup"
+                <Grid x:Name="sourceDirectorySelectionGroup"
+                      Grid.Row="2"
                       Style="{StaticResource DirectorySelectionGroup}">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="15"/>
@@ -98,9 +94,8 @@
                             <materialDesign:PackIcon Kind="ChevronRight"/>
                         </TextBlock> 
                     </Border>
-                    <ComboBox 
-                        Grid.Column="1"  
-                        Name="sourceComboBox" 
+                    <ComboBox Name="sourceComboBox" 
+                        Grid.Column="1"                         
                         MouseEnter="btnLeftOpen_MouseEnter" 
                         MouseLeave="MouseLeaveArea"                      
                         materialDesign:HintAssist.Hint="{x:Static localization:SourceFileStrings.SelectDirectory}"
@@ -109,11 +104,11 @@
                         Style="{StaticResource DirectorySelectionComboBox}"/>
                     <Border Grid.Column="2" Style="{StaticResource DirectorySelectionBorder}"/>
                 </Grid>
-                <DockPanel LastChildFill="True" 
-                           Grid.Row="3"
-                           x:Name="sourceFilesComparisonGroup">
+                <DockPanel x:Name="sourceFilesComparisonGroup"
+                           LastChildFill="True" 
+                           Grid.Row="3">
                     <!--This element is used to stretch ListBox in height-->
-                    <TextBlock 
+                    <TextBlock x:Name="sourceEmptyTextBlock"
                         DockPanel.Dock="Top" 
                         Style="{StaticResource FilesComparisonTextBox}"/>
                     <Border x:Name="sourceFilesInfoBlockBorder" 
@@ -140,29 +135,27 @@
                     </ScrollViewer>
                 </DockPanel>
 
-                <TextBlock 
-                    x:Name="targetHeader"
+                <TextBlock x:Name="targetHeader"
                     Grid.Column="2"
                     Text="{x:Static localization:TargetFileStrings.Header}" 
                     Style="{StaticResource Header}"/>
-                <Grid Grid.Row="1" 
-                      Grid.Column="2"
-                      x:Name="targetFilesSelectionGroup"
+                <Grid x:Name="targetFilesSelectionGroup"
+                      Grid.Row="1" 
+                      Grid.Column="2"                      
                       Style="{StaticResource FilesSelectionGroup}">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
-                    <ComboBox 
-                        x:Name="targetExtensions"
+                    <ComboBox x:Name="targetExtensions"
                         ItemsSource="{Binding FileExtensions}" 
                         SelectedItem="{Binding SelectedTargetExtension}"
                         Style="{StaticResource ExtensionsComboBox}"
                         materialDesign:HintAssist.Hint="{x:Static localization:TargetFileStrings.Extension}"
                         materialDesign:HintAssist.HelperText="{x:Static localization:TargetFileStrings.SelectExtension}"/>
 
-                    <StackPanel Grid.Column="1" 
-                                x:Name="targetFilesSelectionContainer"
+                    <StackPanel x:Name="targetFilesSelectionContainer"
+                                Grid.Column="1" 
                                 Style="{StaticResource FilesSelectionContainer}">
                         <Button x:Name="targetFilesSelectionButton"
                                 Command="{Binding OpenFilesCommand}" 
@@ -170,15 +163,14 @@
                                 Style="{StaticResource FilesSelectionButton}">
                             <materialDesign:PackIcon Style="{StaticResource FilesSelectionButtonIcon}"/>
                         </Button>
-                        <TextBlock 
-                            x:Name="targetFilesSelectionTextBlock"
+                        <TextBlock x:Name="targetFilesSelectionTextBlock"
                             Text="{Binding SelectedTargetFilesMessage}" 
                             Style="{StaticResource FilesSelectionTextBlock}"/>
                     </StackPanel>
                 </Grid>
-                <Grid Grid.Row="2" 
-                      Grid.Column="2" 
-                      x:Name="targetDirectorySelectionGroup"
+                <Grid x:Name="targetDirectorySelectionGroup"
+                      Grid.Row="2" 
+                      Grid.Column="2"                      
                       Style="{StaticResource DirectorySelectionGroup}">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="15"/>
@@ -190,9 +182,8 @@
                             <materialDesign:PackIcon Kind="ChevronRight" />
                         </TextBlock>
                     </Border>
-                    <ComboBox 
+                    <ComboBox Name="targetComboBox" 
                         Grid.Column="1"  
-                        Name="targetComboBox" 
                         Text="{Binding SelectedTargetDirectory}" 
                         MouseEnter="btnLeftOpen_MouseEnter" 
                         MouseLeave="MouseLeaveArea"
@@ -202,12 +193,12 @@
                         Style="{StaticResource DirectorySelectionComboBox}"/>
                     <Border Grid.Column="2" Style="{StaticResource DirectorySelectionBorder}"/>
                 </Grid>
-                <DockPanel Grid.Row="3"
-                           Grid.Column="2"
-                           x:Name="targetFilesComparisonGroup"
+                <DockPanel x:Name="targetFilesComparisonGroup"
+                           Grid.Row="3"
+                           Grid.Column="2"                           
                            LastChildFill="True"  > 
                     <!--This element is used to stretch ListBox in height-->
-                    <TextBlock 
+                    <TextBlock x:Name="targetEmptyTextBlock"
                         DockPanel.Dock="Top" 
                         Style="{StaticResource FilesComparisonTextBox}"/>
                     <Border x:Name="targetFilesInfoBlockBorder" 
@@ -237,9 +228,9 @@
                     </ScrollViewer>
                 </DockPanel> 
             </Grid>
-            <Grid Grid.Row="1" 
-                  Grid.ColumnSpan="2" 
-                  x:Name="actionPanel">
+            <Grid x:Name="actionPanel"
+                  Grid.Row="1" 
+                  Grid.ColumnSpan="2">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
@@ -247,8 +238,8 @@
                 </Grid.ColumnDefinitions>
                 <!--Empty field to fill the space-->
                 <TextBlock/>
-                <GroupBox Grid.Column="1" 
-                          Name="selectActionGroupBox" 
+                <GroupBox Name="selectActionGroupBox"
+                          Grid.Column="1"                            
                           Header="{x:Static localization:ActionPanelStrings.SelectAction}" 
                           Style="{StaticResource SelectActionGroupBox}">
                     <StackPanel 
@@ -305,9 +296,9 @@
                 </WrapPanel>
             </Grid>
                         
-            <StatusBar Grid.Row="2" 
-                       Grid.ColumnSpan="2"
-                       Name="statusBar"
+            <StatusBar Name="statusBar"
+                       Grid.Row="2" 
+                       Grid.ColumnSpan="2"                       
                        Style="{StaticResource StatusBar}">
                 <StatusBarItem>
                     <TextBlock Name="statBarText" Text="Ready"/>
