@@ -163,6 +163,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Commands\Command.cs" />
+    <Compile Include="Converters\ArrayMultiValueConverter.cs" />
     <Compile Include="Domain\ClearOperationResult.cs" />
     <Compile Include="Domain\ClearOperationResultType.cs" />
     <Compile Include="Domain\FilesClearType.cs" />

@@ -3,8 +3,10 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:domain="clr-namespace:PhotoCleaner.App.Domain"
         xmlns:localization="clr-namespace:PhotoCleaner.App.Localization"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
@@ -15,6 +17,11 @@
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="{DynamicResource MaterialDesignFont}"
         Title="Photo Cleaner" Width="1000" Height="650" Margin="0">
+
+    <Window.Resources>
+        <sys:String x:Key="sourceFilesType">Source</sys:String>
+        <sys:String x:Key="targetFilesType">Target</sys:String>
+    </Window.Resources>
     
     <materialDesign:DialogHost
         Identifier="RootDialog"
@@ -95,13 +102,26 @@
                         </TextBlock> 
                     </Border>
                     <ComboBox Name="sourceComboBox" 
-                        Grid.Column="1"                         
-                        MouseEnter="btnLeftOpen_MouseEnter" 
-                        MouseLeave="MouseLeaveArea"                      
-                        materialDesign:HintAssist.Hint="{x:Static localization:SourceFileStrings.SelectDirectory}"
-                        ItemsSource="{Binding SourceLastDirectories}"
-                        SelectedValue="{Binding SelectedSourceDirectory}"
-                        Style="{StaticResource DirectorySelectionComboBox}"/>
+                            Grid.Column="1"                         
+                            MouseEnter="btnLeftOpen_MouseEnter" 
+                            MouseLeave="MouseLeaveArea"                      
+                            materialDesign:HintAssist.Hint="{x:Static localization:SourceFileStrings.SelectDirectory}"
+                            ItemsSource="{Binding SourceLastDirectories}"
+                            SelectedValue="{Binding SelectedSourceDirectory}"
+                            Style="{StaticResource DirectorySelectionComboBox}">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="SelectionChanged">
+                                <i:InvokeCommandAction Command="{Binding DirectoryUpdateCommand}">
+                                    <i:InvokeCommandAction.CommandParameter>
+                                        <MultiBinding Converter="{StaticResource arrayMultiValueConverter}">
+                                            <Binding Path="SelectedItem" ElementName="sourceComboBox"/>
+                                            <Binding Source="{StaticResource sourceFilesType}"/>
+                                        </MultiBinding>
+                                    </i:InvokeCommandAction.CommandParameter>
+                                </i:InvokeCommandAction>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </ComboBox>
                     <Border Grid.Column="2" Style="{StaticResource DirectorySelectionBorder}"/>
                 </Grid>
                 <DockPanel x:Name="sourceFilesComparisonGroup"
@@ -148,11 +168,24 @@
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
                     <ComboBox x:Name="targetExtensions"
-                        ItemsSource="{Binding FileExtensions}" 
-                        SelectedItem="{Binding SelectedTargetExtension}"
-                        Style="{StaticResource ExtensionsComboBox}"
-                        materialDesign:HintAssist.Hint="{x:Static localization:TargetFileStrings.Extension}"
-                        materialDesign:HintAssist.HelperText="{x:Static localization:TargetFileStrings.SelectExtension}"/>
+                            ItemsSource="{Binding FileExtensions}" 
+                            SelectedItem="{Binding SelectedTargetExtension}"
+                            Style="{StaticResource ExtensionsComboBox}"
+                            materialDesign:HintAssist.Hint="{x:Static localization:TargetFileStrings.Extension}"
+                            materialDesign:HintAssist.HelperText="{x:Static localization:TargetFileStrings.SelectExtension}">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="SelectionChanged">
+                                <i:InvokeCommandAction Command="{Binding DirectoryUpdateCommand}">
+                                    <i:InvokeCommandAction.CommandParameter>
+                                        <MultiBinding Converter="{StaticResource arrayMultiValueConverter}">
+                                            <Binding Path="SelectedItem" ElementName="targetExtensions"/>
+                                            <Binding Source="{StaticResource targetFilesType}"/>
+                                        </MultiBinding>
+                                    </i:InvokeCommandAction.CommandParameter>
+                                </i:InvokeCommandAction>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </ComboBox>
 
                     <StackPanel x:Name="targetFilesSelectionContainer"
                                 Grid.Column="1" 
@@ -183,14 +216,27 @@
                         </TextBlock>
                     </Border>
                     <ComboBox Name="targetComboBox" 
-                        Grid.Column="1"  
-                        Text="{Binding SelectedTargetDirectory}" 
-                        MouseEnter="btnLeftOpen_MouseEnter" 
-                        MouseLeave="MouseLeaveArea"
-                        materialDesign:HintAssist.Hint="{x:Static localization:TargetFileStrings.SelectDirectory}"
-                        ItemsSource="{Binding TargetLastDirectories}"
-                        SelectedItem="{Binding SelectedTargetDirectory}"
-                        Style="{StaticResource DirectorySelectionComboBox}"/>
+                            Grid.Column="1"  
+                            Text="{Binding SelectedTargetDirectory}" 
+                            MouseEnter="btnLeftOpen_MouseEnter" 
+                            MouseLeave="MouseLeaveArea"
+                            materialDesign:HintAssist.Hint="{x:Static localization:TargetFileStrings.SelectDirectory}"
+                            ItemsSource="{Binding TargetLastDirectories}"
+                            SelectedItem="{Binding SelectedTargetDirectory}"
+                            Style="{StaticResource DirectorySelectionComboBox}">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="SelectionChanged">
+                                <i:InvokeCommandAction Command="{Binding DirectoryUpdateCommand}">
+                                    <i:InvokeCommandAction.CommandParameter>
+                                        <MultiBinding Converter="{StaticResource arrayMultiValueConverter}">
+                                            <Binding Path="SelectedItem" ElementName="targetComboBox"/>
+                                            <Binding Source="{StaticResource targetFilesType}"/>
+                                        </MultiBinding>
+                                    </i:InvokeCommandAction.CommandParameter>
+                                </i:InvokeCommandAction>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </ComboBox>
                     <Border Grid.Column="2" Style="{StaticResource DirectorySelectionBorder}"/>
                 </Grid>
                 <DockPanel x:Name="targetFilesComparisonGroup"

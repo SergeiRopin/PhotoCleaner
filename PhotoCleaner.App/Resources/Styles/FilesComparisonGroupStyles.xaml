@@ -14,4 +14,24 @@
         <Setter Property="BorderBrush" Value="Gray"/>
         <Setter Property="BorderThickness" Value="0.5 0 0.5 0.5"/>
     </Style>
+    <Style x:Key="FilesComparisonStyle" TargetType="{x:Type ListBoxItem}">
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding IsUnique}" Value="true">
+                <Setter Property="Background">
+                    <Setter.Value>
+                        <SolidColorBrush Color="Red" Opacity="0.2"/>
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="Opacity" Value="0.7" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding IsEmpty}" Value="true">
+                <Setter Property="Background">
+                    <Setter.Value>
+                        <SolidColorBrush Color="Green" Opacity="0.2"/>
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="Opacity" Value="0.7" />
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
 </ResourceDictionary>

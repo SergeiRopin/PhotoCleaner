@@ -11,3 +11,6 @@ dotnet_diagnostic.CA1304.severity = silent
 
 # CA2007: Consider calling ConfigureAwait on the awaited task
 dotnet_diagnostic.CA2007.severity = silent
+
+# CA1065: Do not raise exceptions in unexpected locations
+dotnet_diagnostic.CA1065.severity = silent

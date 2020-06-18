@@ -17,6 +17,9 @@ using PhotoCleaner.App.Services.FilesClearStrategy;
 using PhotoCleaner.App.Views.DialogWindows;
 using PhotoCleaner.Database.Repository;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Collections.Generic;
+using System.IO;
 
 namespace PhotoCleaner.App.ViewModels
 {
@@ -156,38 +159,6 @@ namespace PhotoCleaner.App.ViewModels
         public string ActionButtonTooltip => FilesClearAction == FilesClearType.Move ? TooltipStrings.ActionButtonMove : TooltipStrings.ActionButtonDelete;
 
         public ICommand OpenFilesCommand => new Command(OpenFileDialogCommand);
-        
-        private async void OpenFileDialogCommand(object obj)
-        {
-            FileType type = (FileType)Enum.Parse(typeof(FileType), obj.ToString());
-            if (CanOpenFileDialog(type))
-            {
-                switch (type)
-                {
-                    case FileType.Source:
-                        UpdateFiles(SourceFiles);
-                        SelectedSourceDirectory = _dialogService.SelectedDirectory;
-                        SourceFilesInfo = _filesInfoProvider.GetFilesInfo(SourceFiles);
-                        await UpdateSourceDirectories();
-                        break;
-                    case FileType.Target:
-                        UpdateFiles(TargetFiles);
-                        SelectedTargetDirectory = _dialogService.SelectedDirectory;
-                        TargetFilesInfo = _filesInfoProvider.GetFilesInfo(TargetFiles);
-                        await _directoryRepo.CreateOrUpdateAsync(SelectedTargetDirectory, FileType.Target.ToString());
-                        await UpdateTargetDirectories();
-                        break;
-                    default:
-                        break;
-                }
-            }
-
-            if (SourceFiles.Any() && TargetFiles.Any())
-            {
-                _filesComparer.Compare(SourceFiles, TargetFiles);
-                RemovableFilesInfo = _filesInfoProvider.GetComparisonInfo(SourceFiles, TargetFiles);
-            }
-        }
 
         public ICommand UpdateClearActionCommand
         {
@@ -202,30 +173,97 @@ namespace PhotoCleaner.App.ViewModels
 
         public ICommand ClearFilesCommand => new Command(ClearFilesUserConsentDialog);
 
-        private bool CanOpenFileDialog(FileType type)
+        public ICommand DirectoryUpdateCommand => new Command((obj => 
         {
+            bool callFromDirSelector = (bool)Application.Current.Properties[ApplicationConstants.CallFromDirectoriesSelector];
+            if (!callFromDirSelector)
+                return;
+
+            var args = obj as Tuple<object, object>;
+            if (args == null)
+                throw new ArgumentException("Selected directory cannot be null");
+
+            FileType type;
+            bool isValidType = Enum.TryParse(args.Item2.ToString(), out type);
+            if(!isValidType)
+                throw new ArgumentException("Wrong FileType passed as string parameter");
+
             switch (type)
             {
                 case FileType.Source:
-                    var sourceExtension = ((FileExtension)Enum.Parse(typeof(FileExtension), SelectedSourceExtension)).ToDescription();
-                    return _dialogService.OpenFileDialog(sourceExtension, _lastSourceDirectory);
+                    if (SelectedSourceDirectory == null)
+                        return;
+                    string sourceFilesExtension = ((FileExtension)Enum.Parse(typeof(FileExtension), SelectedSourceExtension)).ToFileSearchPatternDescription();
+                    var sourceDir = Directory.GetFiles(SelectedSourceDirectory, sourceFilesExtension);
+                    var sourceNewFiles = sourceDir.Select(x =>
+                        new SelectedFile
+                        {
+                            Path = x,
+                            Name = Path.GetFileName(x),
+                            NameWithoutExtension = Path.GetFileNameWithoutExtension(x),
+                            Extension = Path.GetExtension(x)
+                        });
+                    UpdateFiles(SourceFiles, sourceNewFiles);
+                    SourceFilesInfo = _filesInfoProvider.GetFilesInfo(SourceFiles);
+                    break;
                 case FileType.Target:
-                    var targetExtension = ((FileExtension)Enum.Parse(typeof(FileExtension), SelectedTargetExtension)).ToDescription();
-                    return _dialogService.OpenFileDialog(targetExtension, _lastTargetDirectory);
-                default:
-                    return false;
+                    if (SelectedTargetDirectory == null)
+                        return;
+                    string targetFilesExtension = ((FileExtension)Enum.Parse(typeof(FileExtension), SelectedTargetExtension)).ToFileSearchPatternDescription();
+                    var targetDir = Directory.GetFiles(SelectedTargetDirectory, targetFilesExtension);
+                    var targetNewFiles = targetDir.Select(x =>
+                        new SelectedFile
+                        {
+                            Path = x,
+                            Name = Path.GetFileName(x),
+                            NameWithoutExtension = Path.GetFileNameWithoutExtension(x),
+                            Extension = Path.GetExtension(x)
+                        });
+                    UpdateFiles(TargetFiles, targetNewFiles);
+                    TargetFilesInfo = _filesInfoProvider.GetFilesInfo(TargetFiles);
+                    break;
             }
-        }
 
-        private void UpdateFiles(ObservableCollection<SelectedFile> files)
-        {
-            if (files == null)
-                files = new ObservableCollection<SelectedFile>();
-            files.Clear();
-            foreach (var file in _dialogService.SelectedFiles)
+            if (SourceFiles.Any() && TargetFiles.Any())
             {
-                files.Add(file);
+                _filesComparer.Compare(SourceFiles, TargetFiles);
+                RemovableFilesInfo = _filesInfoProvider.GetComparisonInfo(SourceFiles, TargetFiles);
             }
+        }));
+         
+        private async void OpenFileDialogCommand(object obj)
+        {
+            Application.Current.Properties[ApplicationConstants.CallFromDirectoriesSelector] = false;
+
+            FileType type = (FileType)Enum.Parse(typeof(FileType), obj.ToString());
+            if (CanOpenFileDialog(type))
+            {
+                switch (type)
+                {
+                    case FileType.Source:
+                        UpdateFiles(SourceFiles, _dialogService.SelectedFiles);
+                        SelectedSourceDirectory = _dialogService.SelectedDirectory;
+                        SourceFilesInfo = _filesInfoProvider.GetFilesInfo(SourceFiles);
+                        await UpdateDirectories(FileType.Source);
+                        break;
+                    case FileType.Target:
+                        UpdateFiles(TargetFiles, _dialogService.SelectedFiles);
+                        SelectedTargetDirectory = _dialogService.SelectedDirectory;
+                        TargetFilesInfo = _filesInfoProvider.GetFilesInfo(TargetFiles);
+                        await UpdateDirectories(FileType.Target);
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            if (SourceFiles.Any() && TargetFiles.Any())
+            {
+                _filesComparer.Compare(SourceFiles, TargetFiles);
+                RemovableFilesInfo = _filesInfoProvider.GetComparisonInfo(SourceFiles, TargetFiles);
+            }
+
+            Application.Current.Properties[ApplicationConstants.CallFromDirectoriesSelector] = true;
         }
 
         private async void ClearFilesUserConsentDialog(object o)
@@ -241,7 +279,6 @@ namespace PhotoCleaner.App.ViewModels
             };
             await DialogHost.Show(view, "RootDialog", ClearFilesDialogClosingEventHandler);
         }
-
         private async void ClearFilesDialogClosingEventHandler(object sender, DialogClosingEventArgs eventArgs)
         {
             if (eventArgs.Parameter == null || (bool)eventArgs.Parameter == false)
@@ -283,33 +320,68 @@ namespace PhotoCleaner.App.ViewModels
             };
             eventArgs.Session.UpdateContent(view);
         }
-
-        private async Task UpdateSourceDirectories()
+        
+        private bool CanOpenFileDialog(FileType type)
         {
-            await _directoryRepo.CreateOrUpdateAsync(SelectedSourceDirectory, FileType.Source.ToString());
-            var sourceDirectories = new ObservableCollection<string>(
-                await _directoryRepo.GetAllPagedAsync(5, FileType.Source.ToString()));
-            string selectedDirectory = SelectedSourceDirectory;
-            SourceLastDirectories.Clear();
-            foreach (var item in sourceDirectories)
+            switch (type)
             {
-                SourceLastDirectories.Add(item);
+                case FileType.Source:
+                    var sourceExtension = ((FileExtension)Enum.Parse(typeof(FileExtension), SelectedSourceExtension)).ToDescription();
+                    return _dialogService.OpenFileDialog(sourceExtension, _lastSourceDirectory);
+                case FileType.Target:
+                    var targetExtension = ((FileExtension)Enum.Parse(typeof(FileExtension), SelectedTargetExtension)).ToDescription();
+                    return _dialogService.OpenFileDialog(targetExtension, _lastTargetDirectory);
+                default:
+                    return false;
             }
-            SelectedSourceDirectory = selectedDirectory;
         }
 
-        private async Task UpdateTargetDirectories()
+        private void UpdateFiles(ObservableCollection<SelectedFile> oldFiles, IEnumerable<SelectedFile> newFiles)
         {
-            await _directoryRepo.CreateOrUpdateAsync(SelectedTargetDirectory, FileType.Target.ToString());
-            var targetDirectories = new ObservableCollection<string>(
-                await _directoryRepo.GetAllPagedAsync(5, FileType.Target.ToString()));
-            string selectedDirectory = SelectedTargetDirectory;
-            TargetLastDirectories.Clear();
-            foreach (var item in targetDirectories)
+            if (oldFiles == null)
+                oldFiles = new ObservableCollection<SelectedFile>();
+            oldFiles.Clear();
+            foreach (var file in newFiles)
             {
-                TargetLastDirectories.Add(item);
+                oldFiles.Add(file);
             }
-            SelectedTargetDirectory = selectedDirectory;
+        }
+
+        private async Task UpdateDirectories(FileType type)
+        {
+            switch (type)
+            {
+                case FileType.Source:
+                    if (SourceLastDirectories.Contains(SelectedSourceDirectory))
+                        return;
+
+                    await _directoryRepo.CreateOrUpdateAsync(SelectedSourceDirectory, type.ToString());
+                    var sourceDirectories = new ObservableCollection<string>(
+                        await _directoryRepo.GetAllPagedAsync(5, type.ToString()));
+                    string selectedSourceDir = SelectedSourceDirectory;
+                    SourceLastDirectories.Clear();
+                    foreach (var item in sourceDirectories)
+                    {
+                        SourceLastDirectories.Add(item);
+                    }
+                    SelectedSourceDirectory = selectedSourceDir;
+                    break;
+                case FileType.Target:
+                    if (TargetLastDirectories.Contains(SelectedTargetDirectory))
+                        return;
+
+                    await _directoryRepo.CreateOrUpdateAsync(SelectedTargetDirectory, FileType.Target.ToString());
+                    var targetDirectories = new ObservableCollection<string>(
+                        await _directoryRepo.GetAllPagedAsync(5, FileType.Target.ToString()));
+                    string selectedTargetDir = SelectedTargetDirectory;
+                    TargetLastDirectories.Clear();
+                    foreach (var item in targetDirectories)
+                    {
+                        TargetLastDirectories.Add(item);
+                    }
+                    SelectedTargetDirectory = selectedTargetDir;
+                    break;
+            }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

@@ -1,4 +1,5 @@
-﻿using PhotoCleaner.App.Startup;
+﻿using PhotoCleaner.App.Domain;
+using PhotoCleaner.App.Startup;
 using System.Windows;
 
 namespace PhotoCleaner.App.Views
@@ -12,6 +13,7 @@ namespace PhotoCleaner.App.Views
         {
             base.OnStartup(e);
             UnityConfig.GetConfiguredContainer();
+            Application.Current.Properties[ApplicationConstants.CallFromDirectoriesSelector] = true;
         }
 
         protected override void OnExit(ExitEventArgs e)
