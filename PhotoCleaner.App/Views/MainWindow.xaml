@@ -69,11 +69,20 @@
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
                     <ComboBox x:Name="sourceExtensions"
-                        ItemsSource="{Binding FileExtensions}" 
-                        SelectedItem="{Binding SelectedSourceExtension}"
-                        Style="{StaticResource ExtensionsComboBox}"
-                        materialDesign:HintAssist.Hint="{x:Static localization:SourceFileStrings.Extension}"
-                        materialDesign:HintAssist.HelperText="{x:Static localization:SourceFileStrings.SelectExtension}"/>
+                            ItemsSource="{Binding FileExtensions}" 
+                            SelectedItem="{Binding SelectedSourceExtension}"
+                            Style="{StaticResource ExtensionsComboBox}"
+                            materialDesign:HintAssist.Hint="{x:Static localization:SourceFileStrings.Extension}"
+                            materialDesign:HintAssist.HelperText="{x:Static localization:SourceFileStrings.SelectExtension}">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="SelectionChanged">
+                                <i:InvokeCommandAction 
+                                    Command="{Binding DirectoryUpdateCommand}" 
+                                    CommandParameter="{x:Static domain:FileType.Source}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+
+                    </ComboBox>
                     <StackPanel x:Name="sourceFilesSelectionContainer"
                                 Grid.Column="1"
                                 Style="{StaticResource FilesSelectionContainer}">
@@ -111,14 +120,9 @@
                             Style="{StaticResource DirectorySelectionComboBox}">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="SelectionChanged">
-                                <i:InvokeCommandAction Command="{Binding DirectoryUpdateCommand}">
-                                    <i:InvokeCommandAction.CommandParameter>
-                                        <MultiBinding Converter="{StaticResource arrayMultiValueConverter}">
-                                            <Binding Path="SelectedItem" ElementName="sourceComboBox"/>
-                                            <Binding Source="{StaticResource sourceFilesType}"/>
-                                        </MultiBinding>
-                                    </i:InvokeCommandAction.CommandParameter>
-                                </i:InvokeCommandAction>
+                                <i:InvokeCommandAction 
+                                    Command="{Binding DirectoryUpdateCommand}"
+                                    CommandParameter="{x:Static domain:FileType.Source}"/>
                             </i:EventTrigger>
                         </i:Interaction.Triggers>
                     </ComboBox>
@@ -175,14 +179,9 @@
                             materialDesign:HintAssist.HelperText="{x:Static localization:TargetFileStrings.SelectExtension}">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="SelectionChanged">
-                                <i:InvokeCommandAction Command="{Binding DirectoryUpdateCommand}">
-                                    <i:InvokeCommandAction.CommandParameter>
-                                        <MultiBinding Converter="{StaticResource arrayMultiValueConverter}">
-                                            <Binding Path="SelectedItem" ElementName="targetExtensions"/>
-                                            <Binding Source="{StaticResource targetFilesType}"/>
-                                        </MultiBinding>
-                                    </i:InvokeCommandAction.CommandParameter>
-                                </i:InvokeCommandAction>
+                                <i:InvokeCommandAction 
+                                    Command="{Binding DirectoryUpdateCommand}"
+                                    CommandParameter="{x:Static domain:FileType.Target}"/>
                             </i:EventTrigger>
                         </i:Interaction.Triggers>
                     </ComboBox>
@@ -226,14 +225,9 @@
                             Style="{StaticResource DirectorySelectionComboBox}">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="SelectionChanged">
-                                <i:InvokeCommandAction Command="{Binding DirectoryUpdateCommand}">
-                                    <i:InvokeCommandAction.CommandParameter>
-                                        <MultiBinding Converter="{StaticResource arrayMultiValueConverter}">
-                                            <Binding Path="SelectedItem" ElementName="targetComboBox"/>
-                                            <Binding Source="{StaticResource targetFilesType}"/>
-                                        </MultiBinding>
-                                    </i:InvokeCommandAction.CommandParameter>
-                                </i:InvokeCommandAction>
+                                <i:InvokeCommandAction 
+                                    Command="{Binding DirectoryUpdateCommand}"
+                                    CommandParameter="{x:Static domain:FileType.Target}"/>
                             </i:EventTrigger>
                         </i:Interaction.Triggers>
                     </ComboBox>

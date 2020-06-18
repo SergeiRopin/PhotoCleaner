@@ -179,12 +179,8 @@ namespace PhotoCleaner.App.ViewModels
             if (!callFromDirSelector)
                 return;
 
-            var args = obj as Tuple<object, object>;
-            if (args == null)
-                throw new ArgumentException("Selected directory cannot be null");
-
             FileType type;
-            bool isValidType = Enum.TryParse(args.Item2.ToString(), out type);
+            bool isValidType = Enum.TryParse(obj.ToString(), out type);
             if(!isValidType)
                 throw new ArgumentException("Wrong FileType passed as string parameter");
 
@@ -202,7 +198,7 @@ namespace PhotoCleaner.App.ViewModels
                             Name = Path.GetFileName(x),
                             NameWithoutExtension = Path.GetFileNameWithoutExtension(x),
                             Extension = Path.GetExtension(x)
-                        });
+                        }).ToList();
                     UpdateFiles(SourceFiles, sourceNewFiles);
                     SourceFilesInfo = _filesInfoProvider.GetFilesInfo(SourceFiles);
                     break;
@@ -218,7 +214,7 @@ namespace PhotoCleaner.App.ViewModels
                             Name = Path.GetFileName(x),
                             NameWithoutExtension = Path.GetFileNameWithoutExtension(x),
                             Extension = Path.GetExtension(x)
-                        });
+                        }).ToList();
                     UpdateFiles(TargetFiles, targetNewFiles);
                     TargetFilesInfo = _filesInfoProvider.GetFilesInfo(TargetFiles);
                     break;
