@@ -84,13 +84,18 @@
     <Compile Include="DBProvider.cs" />
     <Compile Include="DBType.cs" />
     <Compile Include="Dto\DirectoryDto.cs" />
+    <Compile Include="Dto\FileExtensionDto.cs" />
     <Compile Include="MongoDB\MongoDbConnector.cs" />
     <Compile Include="MongoDB\Repository\Directories\MongoDirectoriesRepository.cs" />
+    <Compile Include="MongoDB\Repository\FileExtensioins\MongoFileExtensionsRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\IDirectoriesRepository.cs" />
+    <Compile Include="Repository\IFileExtensionsRepository.cs" />
+    <Compile Include="Repository\IRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="MongoDB\Repository\Directories\scripts\DeleteAllDirectories.txt" />
+    <Content Include="MongoDB\Repository\FileExtensioins\scripts\InitialData.txt" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

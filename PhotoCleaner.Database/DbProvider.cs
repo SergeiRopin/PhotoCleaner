@@ -10,7 +10,7 @@ namespace PhotoCleaner.Database
             DBType dbType;
             bool supported = Enum.TryParse(ConfigurationManager.AppSettings["databaseType"], out dbType);
             if (!supported)
-                throw new ConfigurationErrorsException($"{ConfigurationManager.AppSettings["databaseType"]} is not supported databse");
+                throw new ConfigurationErrorsException($"{ConfigurationManager.AppSettings["databaseType"]} is not supported database");
                 
             switch(dbType)
             {

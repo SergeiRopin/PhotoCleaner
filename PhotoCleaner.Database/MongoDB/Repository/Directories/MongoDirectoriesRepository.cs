@@ -11,9 +11,9 @@ namespace PhotoCleaner.Database.MongoDB.Repository.Directories
 {
     public class MongoDirectoriesRepository : IDirectoriesRepository
     {
-        private const string CollectionName = "directories";
+        public string CollectionName => "directories";
 
-        public async Task<IEnumerable<string>> GetAllPagedAsync(byte number, string dirType)
+        public async Task<IEnumerable<string>> GetAllPagedAsync(int number, string dirType)
         {
             var collection = MongoDbConnector.GetConnection().GetCollection<DirectoryDto>(CollectionName);
 

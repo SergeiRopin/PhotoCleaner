@@ -1,0 +1,6 @@
+﻿db.fileExtensions.deleteMany({})
+
+db.fileExtensions.insertMany([
+   { name: "JPEG", filter: "JPEG files | *.jpg", searchPattern: "*.jpg", isSource: true, isTarget: true },
+   { name: "RAW", filter: "RAW files | *.NEF", searchPattern: "*.NEF", isSource: true, isTarget: true }
+])

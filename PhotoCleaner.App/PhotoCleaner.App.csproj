@@ -211,8 +211,8 @@
       <DependentUpon>TooltipStrings.resx</DependentUpon>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
+    <Compile Include="Models\FileExtension.cs" />
     <Compile Include="Models\SelectedFile.cs" />
-    <Compile Include="Domain\FileExtension.cs" />
     <Compile Include="Domain\FileType.cs" />
     <Compile Include="Services\FilesClearStrategy\FilesDeleteStrategy.cs" />
     <Compile Include="Services\FilesClearStrategy\FilesMoveStrategy.cs" />
@@ -222,9 +222,7 @@
     <Compile Include="Services\FilesInfoProvider\FilesInfoTextProvider.cs" />
     <Compile Include="Services\FilesInfoProvider\IFilesInfoProvider.cs" />
     <Compile Include="Startup\UnityConfig.cs" />
-    <Compile Include="ViewModels\HeaderViewModel.cs" />
     <Compile Include="ViewModels\InfoDialogViewModel.cs" />
-    <Compile Include="ViewModels\NotifyPropertyChanged.cs" />
     <Compile Include="ViewModels\UserConsentDialogViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Page Include="Resources\Styles\DirectorySelectionGroupStyles.xaml">

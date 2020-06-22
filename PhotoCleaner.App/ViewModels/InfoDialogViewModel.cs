@@ -15,7 +15,7 @@ namespace PhotoCleaner.App.ViewModels
         public string Message { get; private set; }
         public InfoDialogType Type { get; private set; }
 
-        private InfoDialogType GetDialogType(ClearOperationResultType operationResult)
+        private static InfoDialogType GetDialogType(ClearOperationResultType operationResult)
         {
             if (operationResult == ClearOperationResultType.Success)
                 return InfoDialogType.Success;

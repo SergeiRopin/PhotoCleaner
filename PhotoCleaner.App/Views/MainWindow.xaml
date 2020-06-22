@@ -68,21 +68,32 @@
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
-                    <ComboBox x:Name="sourceExtensions"
-                            ItemsSource="{Binding FileExtensions}" 
-                            SelectedItem="{Binding SelectedSourceExtension}"
-                            Style="{StaticResource ExtensionsComboBox}"
-                            materialDesign:HintAssist.Hint="{x:Static localization:SourceFileStrings.Extension}"
-                            materialDesign:HintAssist.HelperText="{x:Static localization:SourceFileStrings.SelectExtension}">
-                        <i:Interaction.Triggers>
-                            <i:EventTrigger EventName="SelectionChanged">
-                                <i:InvokeCommandAction 
-                                    Command="{Binding DirectoryUpdateCommand}" 
-                                    CommandParameter="{x:Static domain:FileType.Source}"/>
-                            </i:EventTrigger>
-                        </i:Interaction.Triggers>
 
-                    </ComboBox>
+                    <StackPanel x:Name="sourceFilesExtensionsContainer"
+                            Orientation="Horizontal">
+                        <ComboBox x:Name="sourceExtensions"
+                                ItemsSource="{Binding FileExtensions}"
+                                SelectedItem="{Binding SelectedSourceExtension}"
+                                DisplayMemberPath="Name"
+                                Style="{StaticResource ExtensionsComboBox}"
+                                materialDesign:HintAssist.Hint="{x:Static localization:SourceFileStrings.Extension}"
+                                materialDesign:HintAssist.HelperText="{x:Static localization:SourceFileStrings.SelectExtension}">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="SelectionChanged">
+                                    <i:InvokeCommandAction 
+                                        Command="{Binding DirectoryUpdateCommand}" 
+                                        CommandParameter="{x:Static domain:FileType.Source}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </ComboBox>
+                        <ToggleButton x:Name="sourceFavExtensionButton"
+                                Style="{StaticResource FavouriteExtensionButton}"
+                                IsChecked="True">
+                            <materialDesign:PackIcon
+                                Kind="StarOutline"
+                                Style="{StaticResource FavouriteExtensionIcon}"/>
+                        </ToggleButton>
+                    </StackPanel>
                     <StackPanel x:Name="sourceFilesSelectionContainer"
                                 Grid.Column="1"
                                 Style="{StaticResource FilesSelectionContainer}">
@@ -171,21 +182,36 @@
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
-                    <ComboBox x:Name="targetExtensions"
-                            ItemsSource="{Binding FileExtensions}" 
-                            SelectedItem="{Binding SelectedTargetExtension}"
-                            Style="{StaticResource ExtensionsComboBox}"
-                            materialDesign:HintAssist.Hint="{x:Static localization:TargetFileStrings.Extension}"
-                            materialDesign:HintAssist.HelperText="{x:Static localization:TargetFileStrings.SelectExtension}">
-                        <i:Interaction.Triggers>
-                            <i:EventTrigger EventName="SelectionChanged">
-                                <i:InvokeCommandAction 
+                    <StackPanel x:Name="targetFilesExtensionsContainer"
+                            Orientation="Horizontal">
+                        <ComboBox x:Name="targetExtensions"
+                                ItemsSource="{Binding FileExtensions}" 
+                                SelectedItem="{Binding SelectedTargetExtension}"
+                                DisplayMemberPath="Name"
+                                Style="{StaticResource ExtensionsComboBox}"
+                                materialDesign:HintAssist.Hint="{x:Static localization:TargetFileStrings.Extension}"
+                                materialDesign:HintAssist.HelperText="{x:Static localization:TargetFileStrings.SelectExtension}">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="SelectionChanged">
+                                    <i:InvokeCommandAction 
                                     Command="{Binding DirectoryUpdateCommand}"
                                     CommandParameter="{x:Static domain:FileType.Target}"/>
-                            </i:EventTrigger>
-                        </i:Interaction.Triggers>
-                    </ComboBox>
-
+                                </i:EventTrigger>
+                                <i:EventTrigger EventName="SelectionChanged">
+                                    <i:InvokeCommandAction 
+                                    Command="{Binding DirectoryUpdateCommand}"
+                                    CommandParameter="{x:Static domain:FileType.Target}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </ComboBox>
+                        <ToggleButton x:Name="targetFavExtensionButton"
+                                Style="{StaticResource FavouriteExtensionButton}"
+                                IsChecked="True">
+                            <materialDesign:PackIcon
+                                Kind="StarOutline"
+                                Style="{StaticResource FavouriteExtensionIcon}"/>
+                        </ToggleButton>
+                    </StackPanel>
                     <StackPanel x:Name="targetFilesSelectionContainer"
                                 Grid.Column="1" 
                                 Style="{StaticResource FilesSelectionContainer}">

@@ -17,8 +17,9 @@ namespace PhotoCleaner.App.Views
     /// </summary>
     public partial class MainWindow : Window
     {
-        public IUnityContainer Container => UnityConfig.GetConfiguredContainer();
+        public static IUnityContainer Container => UnityConfig.GetConfiguredContainer();
 
+        //TODO: Extract interfaces, initialize with Unity
         public MainWindow()
         {
             InitializeComponent();
@@ -26,9 +27,11 @@ namespace PhotoCleaner.App.Views
                 new DefaultDialogService(), 
                 new ClearUniqueFilesComparerTemplateMethod(),
                 new FilesInfoTextProvider(),
-                Container.Resolve<IDirectoriesRepository>(DBProvider.GetDatabase()));
+                Container.Resolve<IDirectoriesRepository>(DBProvider.GetDatabase()),
+                Container.Resolve<IFileExtensionsRepository>(DBProvider.GetDatabase()));
         }
 
+        //Remove this
         private void btnLeftOpen_MouseEnter(object sender, MouseEventArgs e)
         {
             statBarText.Text = StatusBarStrings.OpenSourceFilesMessage;

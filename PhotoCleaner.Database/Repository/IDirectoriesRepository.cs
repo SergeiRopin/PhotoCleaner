@@ -3,9 +3,9 @@ using System.Threading.Tasks;
 
 namespace PhotoCleaner.Database.Repository
 {
-    public interface IDirectoriesRepository
+    public interface IDirectoriesRepository : IRepository
     {
-        Task<IEnumerable<string>> GetAllPagedAsync(byte number, string dirType);
+        Task<IEnumerable<string>> GetAllPagedAsync(int number, string dirType);
         Task CreateOrUpdateAsync(string directory, string dirType);
     }
 }
