@@ -166,12 +166,7 @@ namespace PhotoCleaner.App.ViewModels
 
         public ICommand ClearFilesCommand => new Command(ClearFilesUserConsentDialog);
 
-        public ICommand ExtensionUpdateCommand => new Command(obj => 
-        {
-            OpenFilesFromDirectory(obj);
-
-
-        });
+        public ICommand ExtensionUpdateCommand => new Command(OpenFilesFromDirectory);
 
         public ICommand DirectoryUpdateCommand => new Command(OpenFilesFromDirectory);
 

@@ -81,7 +81,7 @@
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="SelectionChanged">
                                     <i:InvokeCommandAction 
-                                        Command="{Binding DirectoryUpdateCommand}" 
+                                        Command="{Binding ExtensionUpdateCommand}" 
                                         CommandParameter="{x:Static domain:FileType.Source}"/>
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
@@ -194,12 +194,7 @@
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="SelectionChanged">
                                     <i:InvokeCommandAction 
-                                    Command="{Binding DirectoryUpdateCommand}"
-                                    CommandParameter="{x:Static domain:FileType.Target}"/>
-                                </i:EventTrigger>
-                                <i:EventTrigger EventName="SelectionChanged">
-                                    <i:InvokeCommandAction 
-                                    Command="{Binding DirectoryUpdateCommand}"
+                                    Command="{Binding ExtensionUpdateCommand}"
                                     CommandParameter="{x:Static domain:FileType.Target}"/>
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
