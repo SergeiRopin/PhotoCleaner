@@ -37,13 +37,6 @@ namespace PhotoCleaner.Database.MongoDB.Repository.Directories
         {
             var collection = MongoDbConnector.GetConnection().GetCollection<DirectoryDto>(CollectionName);
 
-            var lastOpenedDirectory = new DirectoryDto
-            {
-                Name = directory,
-                Type = dirType,
-                CreatedAt = DateTime.UtcNow
-            };
-
             var builder = Builders<DirectoryDto>.Filter;
             var filter = builder.Eq(x => x.Type, dirType) & builder.Eq(x => x.Name, directory);
             var update = Builders<DirectoryDto>.Update.Set(x => x.CreatedAt, DateTime.UtcNow);
@@ -51,7 +44,15 @@ namespace PhotoCleaner.Database.MongoDB.Repository.Directories
             var result = await collection.UpdateOneAsync(filter, update);
 
             if (result.ModifiedCount == 0)
+            {
+                var lastOpenedDirectory = new DirectoryDto
+                {
+                    Name = directory,
+                    Type = dirType,
+                    CreatedAt = DateTime.UtcNow
+                };
                 await collection.InsertOneAsync(lastOpenedDirectory);
+            }
         }
     }
 }

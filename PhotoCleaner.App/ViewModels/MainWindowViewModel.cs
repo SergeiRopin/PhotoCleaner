@@ -29,6 +29,7 @@ namespace PhotoCleaner.App.ViewModels
         private IFilesInfoProvider _filesInfoProvider;
         private IDirectoriesRepository _directoryRepo;
         private IFileExtensionsRepository _fileExtensionsRepo;
+        private IFavouriteExtensionRepository _favouriteExtensionRepo;
 
         private string _selectedSourceDirectory;
         private string _selectedTargetDirectory;
@@ -47,20 +48,23 @@ namespace PhotoCleaner.App.ViewModels
             IFilesComparerTemplateMethod filesComparer,
             IFilesInfoProvider filesInfoProvider,
             IDirectoriesRepository directoryRepo,
-            IFileExtensionsRepository fileExtensionsRepo)
+            IFileExtensionsRepository fileExtensionsRepo,
+            IFavouriteExtensionRepository favouriteExtensionRepo)
         {
             _dialogService = dialogService;
             _filesComparer = filesComparer;
             _filesInfoProvider = filesInfoProvider;
             _directoryRepo = directoryRepo;
             _fileExtensionsRepo = fileExtensionsRepo;
+            _favouriteExtensionRepo = favouriteExtensionRepo;
 
             Initialize();
         }
 
         public ObservableCollection<SelectedFile> SourceFiles { get; private set; } = new ObservableCollection<SelectedFile>();
         public ObservableCollection<SelectedFile> TargetFiles { get; private set; } = new ObservableCollection<SelectedFile>();
-        public ObservableCollection<FileExtension> FileExtensions { get; private set; } = new ObservableCollection<FileExtension>();
+        public ObservableCollection<FileExtension> SourceFileExtensions { get; private set; } = new ObservableCollection<FileExtension>();
+        public ObservableCollection<FileExtension> TargetFileExtensions { get; private set; } = new ObservableCollection<FileExtension>();
         public ObservableCollection<string> SourceLastDirectories { get; private set; } = new ObservableCollection<string>();
         public ObservableCollection<string> TargetLastDirectories { get; private set; } = new ObservableCollection<string>();
 
@@ -102,6 +106,24 @@ namespace PhotoCleaner.App.ViewModels
                 _selectedTargetExtension = value;
                 OnPropertyChanged("SelectedTargetExtension");
                 OnPropertyChanged("SelectedTargetFilesMessage");
+            }
+        }
+        public bool IsSourceFavouriteExtension
+        {
+            get => SelectedSourceExtension.IsFavourite;
+            set
+            {
+                SelectedSourceExtension.IsFavourite = value;
+                OnPropertyChanged("IsSourceFavouriteExtension");
+            }
+        }
+        public bool IsTargetFavouriteExtension
+        {
+            get => SelectedTargetExtension.IsFavourite;
+            set
+            {
+                SelectedTargetExtension.IsFavourite = value;
+                OnPropertyChanged("IsTargetFavouriteExtension");
             }
         }
         public string SelectedSourceFilesMessage => string.Format(SourceFileStrings.SelectFilesMessage, SelectedSourceExtension.Name);
@@ -166,9 +188,68 @@ namespace PhotoCleaner.App.ViewModels
 
         public ICommand ClearFilesCommand => new Command(ClearFilesUserConsentDialog);
 
-        public ICommand ExtensionUpdateCommand => new Command(OpenFilesFromDirectory);
+        public ICommand UpdateExtensionCommand => new Command(UpdateExtension);
 
-        public ICommand DirectoryUpdateCommand => new Command(OpenFilesFromDirectory);
+        public ICommand UpdateFavouriteExtensionCommand => new Command(UpdateFavouriteExtension);
+
+        public ICommand UpdateDirectoryCommand => new Command(OpenFilesFromDirectory);
+
+
+        private void UpdateExtension(object fileType)
+        {
+            FileType type = (FileType)Enum.Parse(typeof(FileType), fileType.ToString());
+            switch (type)
+            {
+                case FileType.Source:
+                    IsSourceFavouriteExtension = SelectedSourceExtension.IsFavourite;
+                    break;
+                case FileType.Target:
+                    IsTargetFavouriteExtension = SelectedTargetExtension.IsFavourite;
+                    break;
+            }
+
+            OpenFilesFromDirectory(fileType);
+        }
+
+        private async void UpdateFavouriteExtension(object fileType)
+        {
+            FileType type = (FileType)Enum.Parse(typeof(FileType), fileType.ToString());
+            switch (type)
+            {
+                case FileType.Source:
+                    IsSourceFavouriteExtension = SelectedSourceExtension.IsFavourite;
+
+                    if (!SelectedSourceExtension.IsFavourite)
+                    {
+                        await _favouriteExtensionRepo.Delete(type.ToString());
+                        break;
+                    }
+                    await _favouriteExtensionRepo.CreateOrUpdate(SelectedSourceExtension.Id, type.ToString());
+
+                    foreach (var extension in SourceFileExtensions.Where(x => x.Id != SelectedSourceExtension.Id))
+                    {
+                        extension.IsFavourite = false;
+                    }
+                    break;
+                case FileType.Target:
+                    IsTargetFavouriteExtension = SelectedTargetExtension.IsFavourite;
+
+                    if (!SelectedTargetExtension.IsFavourite)
+                    {
+                        await _favouriteExtensionRepo.Delete(type.ToString());
+                        break;
+                    }
+
+                    await _favouriteExtensionRepo.CreateOrUpdate(SelectedTargetExtension.Id, type.ToString());
+
+                    foreach (var extension in TargetFileExtensions.Where(x => x.Id != SelectedTargetExtension.Id))
+                    {
+                        extension.IsFavourite = false;
+                    }
+                    break;
+            }
+        }
+
 
         private void Initialize()
         {
@@ -179,20 +260,51 @@ namespace PhotoCleaner.App.ViewModels
             TargetLastDirectories = new ObservableCollection<string>(
                 Task.Run(async () => await _directoryRepo.GetAllPagedAsync(5, FileType.Target.ToString())).Result);
 
-            FileExtensions = new ObservableCollection<FileExtension>(
+            var sourceFileExtensions = new ObservableCollection<FileExtension>(
                 Task.Run(async () => await _fileExtensionsRepo.GetAllAsync(FileType.Source.ToString())).Result
-                .Select(x => 
-                    new FileExtension 
-                    { 
+                .Select(x =>
+                    new FileExtension
+                    {
+                        Id = x.Id,
                         Name = x.Name,
                         Filter = x.Filter,
                         SearchPattern = x.SearchPattern
                     }));
 
-            if (FileExtensions.Any())
+            var targetFileExtensions = new ObservableCollection<FileExtension>(
+                Task.Run(async () => await _fileExtensionsRepo.GetAllAsync(FileType.Source.ToString())).Result
+                .Select(x =>
+                    new FileExtension
+                    {
+                        Id = x.Id,
+                        Name = x.Name,
+                        Filter = x.Filter,
+                        SearchPattern = x.SearchPattern
+                    }));
+            SourceFileExtensions = sourceFileExtensions;
+            TargetFileExtensions = targetFileExtensions;
+
+            var sourceFavExtension = Task.Run(async () => await _favouriteExtensionRepo.GetByType(FileType.Source.ToString())).Result;
+            var targetFavExtension = Task.Run(async () => await _favouriteExtensionRepo.GetByType(FileType.Target.ToString())).Result;
+
+            if (sourceFileExtensions.Any() && sourceFavExtension != null)
             {
-                SelectedSourceExtension = FileExtensions.First();
-                SelectedTargetExtension = FileExtensions.First();
+                SelectedSourceExtension = sourceFileExtensions.First(x => x.Id == sourceFavExtension.ExtensionId);
+                SelectedSourceExtension.IsFavourite = true;
+            }
+            else
+            {
+                SelectedSourceExtension = sourceFileExtensions.First();
+            }
+
+            if (targetFileExtensions.Any() && targetFavExtension != null)
+            {
+                SelectedTargetExtension = targetFileExtensions.First(x => x.Id == targetFavExtension.ExtensionId);
+                SelectedTargetExtension.IsFavourite = true;
+            }
+            else
+            {
+                SelectedTargetExtension = targetFileExtensions.First();
             }
         }
 
@@ -338,7 +450,7 @@ namespace PhotoCleaner.App.ViewModels
             };
             eventArgs.Session.UpdateContent(view);
         }
-        
+
         private bool CanOpenFileDialog(FileType type)
         {
             switch (type)
@@ -401,6 +513,6 @@ namespace PhotoCleaner.App.ViewModels
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
-        public void OnPropertyChanged([CallerMemberName]string prop = "") => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
+        public void OnPropertyChanged([CallerMemberName] string prop = "") => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
     }
 }

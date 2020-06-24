@@ -72,7 +72,7 @@
                     <StackPanel x:Name="sourceFilesExtensionsContainer"
                             Orientation="Horizontal">
                         <ComboBox x:Name="sourceExtensions"
-                                ItemsSource="{Binding FileExtensions}"
+                                ItemsSource="{Binding SourceFileExtensions}"
                                 SelectedItem="{Binding SelectedSourceExtension}"
                                 DisplayMemberPath="Name"
                                 Style="{StaticResource ExtensionsComboBox}"
@@ -81,14 +81,16 @@
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="SelectionChanged">
                                     <i:InvokeCommandAction 
-                                        Command="{Binding ExtensionUpdateCommand}" 
+                                        Command="{Binding UpdateExtensionCommand}" 
                                         CommandParameter="{x:Static domain:FileType.Source}"/>
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
                         </ComboBox>
                         <ToggleButton x:Name="sourceFavExtensionButton"
                                 Style="{StaticResource FavouriteExtensionButton}"
-                                IsChecked="True">
+                                IsChecked="{Binding IsSourceFavouriteExtension}"
+                                Command="{Binding UpdateFavouriteExtensionCommand}"
+                                CommandParameter="{x:Static domain:FileType.Source}">
                             <materialDesign:PackIcon
                                 Kind="StarOutline"
                                 Style="{StaticResource FavouriteExtensionIcon}"/>
@@ -132,7 +134,7 @@
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="SelectionChanged">
                                 <i:InvokeCommandAction 
-                                    Command="{Binding DirectoryUpdateCommand}"
+                                    Command="{Binding UpdateDirectoryCommand}"
                                     CommandParameter="{x:Static domain:FileType.Source}"/>
                             </i:EventTrigger>
                         </i:Interaction.Triggers>
@@ -185,7 +187,7 @@
                     <StackPanel x:Name="targetFilesExtensionsContainer"
                             Orientation="Horizontal">
                         <ComboBox x:Name="targetExtensions"
-                                ItemsSource="{Binding FileExtensions}" 
+                                ItemsSource="{Binding TargetFileExtensions}" 
                                 SelectedItem="{Binding SelectedTargetExtension}"
                                 DisplayMemberPath="Name"
                                 Style="{StaticResource ExtensionsComboBox}"
@@ -194,14 +196,16 @@
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="SelectionChanged">
                                     <i:InvokeCommandAction 
-                                    Command="{Binding ExtensionUpdateCommand}"
+                                    Command="{Binding UpdateExtensionCommand}"
                                     CommandParameter="{x:Static domain:FileType.Target}"/>
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
                         </ComboBox>
                         <ToggleButton x:Name="targetFavExtensionButton"
                                 Style="{StaticResource FavouriteExtensionButton}"
-                                IsChecked="True">
+                                IsChecked="{Binding IsTargetFavouriteExtension}"
+                                Command="{Binding UpdateFavouriteExtensionCommand}"
+                                CommandParameter="{x:Static domain:FileType.Target}">
                             <materialDesign:PackIcon
                                 Kind="StarOutline"
                                 Style="{StaticResource FavouriteExtensionIcon}"/>
@@ -247,7 +251,7 @@
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="SelectionChanged">
                                 <i:InvokeCommandAction 
-                                    Command="{Binding DirectoryUpdateCommand}"
+                                    Command="{Binding UpdateDirectoryCommand}"
                                     CommandParameter="{x:Static domain:FileType.Target}"/>
                             </i:EventTrigger>
                         </i:Interaction.Triggers>

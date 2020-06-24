@@ -28,7 +28,8 @@ namespace PhotoCleaner.App.Views
                 new ClearUniqueFilesComparerTemplateMethod(),
                 new FilesInfoTextProvider(),
                 Container.Resolve<IDirectoriesRepository>(DBProvider.GetDatabase()),
-                Container.Resolve<IFileExtensionsRepository>(DBProvider.GetDatabase()));
+                Container.Resolve<IFileExtensionsRepository>(DBProvider.GetDatabase()),
+                Container.Resolve<IFavouriteExtensionRepository>(DBProvider.GetDatabase()));
         }
 
         //Remove this

@@ -1,6 +1,7 @@
 ﻿using PhotoCleaner.Database;
 using PhotoCleaner.Database.MongoDB.Repository.Directories;
-using PhotoCleaner.Database.MongoDB.Repository.FileExtensioins;
+using PhotoCleaner.Database.MongoDB.Repository.FavouriteExtension;
+using PhotoCleaner.Database.MongoDB.Repository.FileExtensions;
 using PhotoCleaner.Database.Repository;
 using System;
 using Unity;
@@ -38,6 +39,7 @@ namespace PhotoCleaner.App.Startup
             //repositories
             container.RegisterType<IDirectoriesRepository, MongoDirectoriesRepository>(DBType.Mongo.ToString());
             container.RegisterType<IFileExtensionsRepository, MongoFileExtensionsRepository>(DBType.Mongo.ToString());
+            container.RegisterType<IFavouriteExtensionRepository, MongoFavouriteExtensionRepository>(DBType.Mongo.ToString());
         }
     }
 }

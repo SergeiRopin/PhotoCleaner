@@ -5,25 +5,20 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace PhotoCleaner.Database.MongoDB.Repository.FileExtensioins
+namespace PhotoCleaner.Database.MongoDB.Repository.FileExtensions
 {
     public class MongoFileExtensionsRepository : IFileExtensionsRepository
     {
         public string CollectionName => "fileExtensions";
 
-        public async Task<IEnumerable<FileExtensionDto>> GetAllAsync(string dirType)
+        public async Task<IEnumerable<FileExtensionDto>> GetAllAsync(string fileType)
         {
             var collection = MongoDbConnector.GetConnection().GetCollection<FileExtensionDto>(CollectionName);
             //TODO: Remove "Source" use appropriate model from PhotoCleaner.Core
-            var filter = string.Equals(dirType, "Source", StringComparison.InvariantCultureIgnoreCase) 
+            var filter = string.Equals(fileType, "Source", StringComparison.InvariantCultureIgnoreCase) 
                 ? Builders<FileExtensionDto>.Filter.Eq(x => x.IsSource, true)
                 : Builders<FileExtensionDto>.Filter.Eq(x => x.IsTarget, true);
             return await collection.Find(filter).ToListAsync();
-        }
-
-        public void MakeFavourite(string dirType, string extension)
-        {
-            throw new NotImplementedException();
         }
     }
 }
