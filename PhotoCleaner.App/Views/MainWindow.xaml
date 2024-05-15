@@ -6,6 +6,7 @@
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:domain="clr-namespace:PhotoCleaner.App.Domain"
         xmlns:localization="clr-namespace:PhotoCleaner.App.Localization"
+        xmlns:view="clr-namespace:PhotoCleaner.App.Views"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
@@ -58,9 +59,10 @@
                     Grid.RowSpan="4" 
                     Style="{StaticResource VerticalGridSplitter}" />
 
-                <TextBlock x:Name="sourceHeader"
+                <!--<TextBlock x:Name="sourceHeader"
                     Text="{x:Static localization:SourceFileStrings.Header}" 
-                    Style="{StaticResource Header}" />
+                    Style="{StaticResource Header}" />-->
+                <view:Header DataContext="{Binding HeaderViewModel}"/>
                 <Grid x:Name="sourceFilesSelectionGroup"
                       Grid.Row="1"
                       Style="{StaticResource FilesSelectionGroup}">

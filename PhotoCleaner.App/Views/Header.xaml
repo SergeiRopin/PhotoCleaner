@@ -6,5 +6,7 @@
              xmlns:localization="clr-namespace:PhotoCleaner.App.Localization"
              mc:Ignorable="d"
              DataContext="HeaderViewModel">
-
+    <TextBlock x:Name="sourceHeader"
+                    Text="{x:Static localization:SourceFileStrings.Header}" 
+                    Style="{StaticResource Header}" />
 </UserControl>
