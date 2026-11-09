@@ -6,6 +6,7 @@ using PhotoCleaner.App.Startup;
 using PhotoCleaner.App.ViewModels;
 using PhotoCleaner.Database;
 using PhotoCleaner.Database.Repository;
+using System;
 using System.Windows;
 using System.Windows.Input;
 using Unity;
@@ -23,13 +24,24 @@ namespace PhotoCleaner.App.Views
         public MainWindow()
         {
             InitializeComponent();
-            DataContext = new MainWindowViewModel(
-                new DefaultDialogService(), 
-                new ClearUniqueFilesComparerTemplateMethod(),
-                new FilesInfoTextProvider(),
-                Container.Resolve<IDirectoriesRepository>(DBProvider.GetDatabase()),
-                Container.Resolve<IFileExtensionsRepository>(DBProvider.GetDatabase()),
-                Container.Resolve<IFavouriteExtensionRepository>(DBProvider.GetDatabase()));
+            try
+            {
+                DataContext = new MainWindowViewModel(
+                    new DefaultDialogService(),
+                    new ClearUniqueFilesComparerTemplateMethod(),
+                    new FilesInfoTextProvider(),
+                    Container.Resolve<IDirectoriesRepository>(DBProvider.GetDatabase()),
+                    Container.Resolve<IFileExtensionsRepository>(DBProvider.GetDatabase()),
+                    Container.Resolve<IFavouriteExtensionRepository>(DBProvider.GetDatabase()));
+            }
+            catch (Exception ex)
+            {
+                var error = ex is AggregateException agg ? agg.Flatten().InnerException ?? ex : ex;
+                MessageBox.Show(
+                    $"Не вдалося запустити застосунок. Перевірте, що MongoDB запущена і рядок підключення в App.config правильний.\n\n{error.Message}",
+                    "PhotoCleaner", MessageBoxButton.OK, MessageBoxImage.Error);
+                Application.Current.Shutdown(1);
+            }
         }
 
         //Remove this

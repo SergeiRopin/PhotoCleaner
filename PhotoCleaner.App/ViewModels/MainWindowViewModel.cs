@@ -272,7 +272,7 @@ namespace PhotoCleaner.App.ViewModels
                     }));
 
             var targetFileExtensions = new ObservableCollection<FileExtension>(
-                Task.Run(async () => await _fileExtensionsRepo.GetAllAsync(FileType.Source.ToString())).Result
+                Task.Run(async () => await _fileExtensionsRepo.GetAllAsync(FileType.Target.ToString())).Result
                 .Select(x =>
                     new FileExtension
                     {
@@ -287,25 +287,28 @@ namespace PhotoCleaner.App.ViewModels
             var sourceFavExtension = Task.Run(async () => await _favouriteExtensionRepo.GetByType(FileType.Source.ToString())).Result;
             var targetFavExtension = Task.Run(async () => await _favouriteExtensionRepo.GetByType(FileType.Target.ToString())).Result;
 
-            if (sourceFileExtensions.Any() && sourceFavExtension != null)
+            SelectedSourceExtension = SelectExtension(sourceFileExtensions, sourceFavExtension?.ExtensionId);
+            SelectedTargetExtension = SelectExtension(targetFileExtensions, targetFavExtension?.ExtensionId);
+        }
+
+        private static FileExtension SelectExtension(ObservableCollection<FileExtension> extensions, string favouriteId)
+        {
+            if (extensions.Count == 0)
             {
-                SelectedSourceExtension = sourceFileExtensions.First(x => x.Id == sourceFavExtension.ExtensionId);
-                SelectedSourceExtension.IsFavourite = true;
-            }
-            else
-            {
-                SelectedSourceExtension = sourceFileExtensions.First();
+                // Database has no extensions yet: fall back to a catch-all so the UI can still start.
+                var fallback = new FileExtension { Id = string.Empty, Name = "*.*", Filter = "All files|*.*", SearchPattern = "*.*" };
+                extensions.Add(fallback);
+                return fallback;
             }
 
-            if (targetFileExtensions.Any() && targetFavExtension != null)
+            var favourite = favouriteId == null ? null : extensions.FirstOrDefault(x => x.Id == favouriteId);
+            if (favourite != null)
             {
-                SelectedTargetExtension = targetFileExtensions.First(x => x.Id == targetFavExtension.ExtensionId);
-                SelectedTargetExtension.IsFavourite = true;
+                favourite.IsFavourite = true;
+                return favourite;
             }
-            else
-            {
-                SelectedTargetExtension = targetFileExtensions.First();
-            }
+
+            return extensions.First();
         }
 
         private void OpenFilesFromDirectory(object obj)
