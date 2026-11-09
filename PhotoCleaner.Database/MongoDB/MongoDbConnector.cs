@@ -1,5 +1,6 @@
 ﻿using MongoDB.Bson.Serialization.Conventions;
 using MongoDB.Driver;
+using System;
 using System.Configuration;
 
 namespace PhotoCleaner.Database.MongoDB
@@ -12,7 +13,10 @@ namespace PhotoCleaner.Database.MongoDB
 
             string connectionString = ConfigurationManager.ConnectionStrings["MongoDb"].ConnectionString;
             var connection = new MongoUrlBuilder(connectionString);
-            MongoClient client = new MongoClient(connectionString);
+            var settings = MongoClientSettings.FromConnectionString(connectionString);
+            // Fail fast when MongoDB is not running instead of waiting the default 30 seconds.
+            settings.ServerSelectionTimeout = TimeSpan.FromSeconds(3);
+            MongoClient client = new MongoClient(settings);
             return client.GetDatabase(connection.DatabaseName);
         }
 
