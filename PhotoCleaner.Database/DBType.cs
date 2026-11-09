@@ -3,6 +3,7 @@
     public enum DBType
     {
         SQL, 
-        Mongo
+        Mongo,
+        Local
     }
 }

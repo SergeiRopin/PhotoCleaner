@@ -1,4 +1,5 @@
 ﻿using PhotoCleaner.Database;
+using PhotoCleaner.Database.Local;
 using PhotoCleaner.Database.MongoDB.Repository.Directories;
 using PhotoCleaner.Database.MongoDB.Repository.FavouriteExtension;
 using PhotoCleaner.Database.MongoDB.Repository.FileExtensions;
@@ -40,6 +41,11 @@ namespace PhotoCleaner.App.Startup
             container.RegisterType<IDirectoriesRepository, MongoDirectoriesRepository>(DBType.Mongo.ToString());
             container.RegisterType<IFileExtensionsRepository, MongoFileExtensionsRepository>(DBType.Mongo.ToString());
             container.RegisterType<IFavouriteExtensionRepository, MongoFavouriteExtensionRepository>(DBType.Mongo.ToString());
+
+            //local (hardcoded, in-memory) repositories, no database required
+            container.RegisterType<IDirectoriesRepository, LocalDirectoriesRepository>(DBType.Local.ToString());
+            container.RegisterType<IFileExtensionsRepository, LocalFileExtensionsRepository>(DBType.Local.ToString());
+            container.RegisterType<IFavouriteExtensionRepository, LocalFavouriteExtensionRepository>(DBType.Local.ToString());
         }
     }
 }

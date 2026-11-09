@@ -255,57 +255,65 @@ namespace PhotoCleaner.App.ViewModels
         {
             _filesClearAction = FilesClearType.Move;
 
-            SourceLastDirectories = new ObservableCollection<string>(
-                Task.Run(async () => await _directoryRepo.GetAllPagedAsync(5, FileType.Source.ToString())).Result);
-            TargetLastDirectories = new ObservableCollection<string>(
-                Task.Run(async () => await _directoryRepo.GetAllPagedAsync(5, FileType.Target.ToString())).Result);
+            // The app must start even when the database is unavailable: startup reads fall back to defaults.
+            // After the first failure the remaining startup reads are skipped to avoid repeated timeouts.
+            bool dbAvailable = true;
+            T LoadOrDefault<T>(Func<Task<T>> load, T fallback)
+            {
+                if (!dbAvailable)
+                    return fallback;
+                try
+                {
+                    return Task.Run(load).GetAwaiter().GetResult();
+                }
+                catch (Exception)
+                {
+                    dbAvailable = false;
+                    return fallback;
+                }
+            }
 
+            SourceLastDirectories = new ObservableCollection<string>(
+                LoadOrDefault(() => _directoryRepo.GetAllPagedAsync(5, FileType.Source.ToString()), Enumerable.Empty<string>()));
+            TargetLastDirectories = new ObservableCollection<string>(
+                LoadOrDefault(() => _directoryRepo.GetAllPagedAsync(5, FileType.Target.ToString()), Enumerable.Empty<string>()));
+
+            var noExtensions = Enumerable.Empty<PhotoCleaner.Database.Dto.FileExtensionDto>();
             var sourceFileExtensions = new ObservableCollection<FileExtension>(
-                Task.Run(async () => await _fileExtensionsRepo.GetAllAsync(FileType.Source.ToString())).Result
-                .Select(x =>
-                    new FileExtension
-                    {
-                        Id = x.Id,
-                        Name = x.Name,
-                        Filter = x.Filter,
-                        SearchPattern = x.SearchPattern
-                    }));
+                LoadOrDefault(() => _fileExtensionsRepo.GetAllAsync(FileType.Source.ToString()), noExtensions)
+                .Select(x => new FileExtension { Id = x.Id, Name = x.Name, Filter = x.Filter, SearchPattern = x.SearchPattern }));
 
             var targetFileExtensions = new ObservableCollection<FileExtension>(
-                Task.Run(async () => await _fileExtensionsRepo.GetAllAsync(FileType.Source.ToString())).Result
-                .Select(x =>
-                    new FileExtension
-                    {
-                        Id = x.Id,
-                        Name = x.Name,
-                        Filter = x.Filter,
-                        SearchPattern = x.SearchPattern
-                    }));
+                LoadOrDefault(() => _fileExtensionsRepo.GetAllAsync(FileType.Target.ToString()), noExtensions)
+                .Select(x => new FileExtension { Id = x.Id, Name = x.Name, Filter = x.Filter, SearchPattern = x.SearchPattern }));
             SourceFileExtensions = sourceFileExtensions;
             TargetFileExtensions = targetFileExtensions;
 
-            var sourceFavExtension = Task.Run(async () => await _favouriteExtensionRepo.GetByType(FileType.Source.ToString())).Result;
-            var targetFavExtension = Task.Run(async () => await _favouriteExtensionRepo.GetByType(FileType.Target.ToString())).Result;
+            var sourceFavExtension = LoadOrDefault(() => _favouriteExtensionRepo.GetByType(FileType.Source.ToString()), null);
+            var targetFavExtension = LoadOrDefault(() => _favouriteExtensionRepo.GetByType(FileType.Target.ToString()), null);
 
-            if (sourceFileExtensions.Any() && sourceFavExtension != null)
+            SelectedSourceExtension = SelectExtension(sourceFileExtensions, sourceFavExtension?.ExtensionId);
+            SelectedTargetExtension = SelectExtension(targetFileExtensions, targetFavExtension?.ExtensionId);
+        }
+
+        private static FileExtension SelectExtension(ObservableCollection<FileExtension> extensions, string favouriteId)
+        {
+            if (extensions.Count == 0)
             {
-                SelectedSourceExtension = sourceFileExtensions.First(x => x.Id == sourceFavExtension.ExtensionId);
-                SelectedSourceExtension.IsFavourite = true;
-            }
-            else
-            {
-                SelectedSourceExtension = sourceFileExtensions.First();
+                // Database has no extensions yet: fall back to a catch-all so the UI can still start.
+                var fallback = new FileExtension { Id = string.Empty, Name = "*.*", Filter = "All files|*.*", SearchPattern = "*.*" };
+                extensions.Add(fallback);
+                return fallback;
             }
 
-            if (targetFileExtensions.Any() && targetFavExtension != null)
+            var favourite = favouriteId == null ? null : extensions.FirstOrDefault(x => x.Id == favouriteId);
+            if (favourite != null)
             {
-                SelectedTargetExtension = targetFileExtensions.First(x => x.Id == targetFavExtension.ExtensionId);
-                SelectedTargetExtension.IsFavourite = true;
+                favourite.IsFavourite = true;
+                return favourite;
             }
-            else
-            {
-                SelectedTargetExtension = targetFileExtensions.First();
-            }
+
+            return extensions.First();
         }
 
         private void OpenFilesFromDirectory(object obj)

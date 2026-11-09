@@ -18,6 +18,8 @@ namespace PhotoCleaner.Database
                     return "SQL";
                 case DBType.Mongo:
                     return "Mongo";
+                case DBType.Local:
+                    return "Local";
                 default:
                     return "SQL";
             }
