@@ -164,6 +164,7 @@
     <Compile Include="Dto\DirectoryDto.cs" />
     <Compile Include="Dto\FavouriteExtensionDto.cs" />
     <Compile Include="Dto\FileExtensionDto.cs" />
+    <Compile Include="Local\LocalRepositories.cs" />
     <Compile Include="MongoDB\MongoDbConnector.cs" />
     <Compile Include="MongoDB\Repository\Directories\MongoDirectoriesRepository.cs" />
     <Compile Include="MongoDB\Repository\FavouriteExtension\MongoFavouriteExtensionRepository.cs" />
